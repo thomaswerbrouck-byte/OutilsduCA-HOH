@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hemotech — Portail TTE</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    :root{
+      --navy: #1D3B6B;
+      --coral:#E05555;
+      --teal: #0891b2;
+      --light:#f0f5fc;
+      --card: #ffffff;
+      --border:#dce6f0;
+      --text: #1e293b;
+      --muted:#64748b;
+    }
+
+    html,body{height:100%}
+
+    body{
+      font-family:'Segoe UI',Arial,sans-serif;
+      background:var(--light);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* ── HEADER ────────────────────────────────────── */
+    header{
+      background:var(--navy);
+      padding:0 40px;
+      height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      box-shadow:0 2px 12px rgba(0,0,0,.25);
+      flex-shrink:0;
+    }
+
+    .logo-wrap img{height:38px;display:block}
+
+    .header-right{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+    }
+    .header-right .title{
+      font-size:14px;font-weight:600;color:white;letter-spacing:.02em;
+    }
+    .header-right .sub{
+      font-size:10px;color:rgba(255,255,255,.55);margin-top:1px;
+    }
+
+    /* ligne corail sous le header */
+    .header-line{height:3px;background:var(--coral);flex-shrink:0}
+
+    /* ── HERO ──────────────────────────────────────── */
+    .hero{
+      text-align:center;
+      padding:40px 20px 28px;
+      flex-shrink:0;
+    }
+    .hero h1{
+      font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px;
+    }
+    .hero p{
+      font-size:13px;color:var(--muted);
+    }
+
+    /* ── GRILLE MODULES ────────────────────────────── */
+    .grid-wrap{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0 40px 48px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      grid-template-rows:auto auto;
+      gap:20px;
+      width:100%;
+      max-width:900px;
+    }
+
+    /* Planning : grande carte sur toute la première ligne */
+    .card-planning{
+      grid-column:1 / 4;
+    }
+
+    /* ── CARTE GÉNÉRIQUE ───────────────────────────── */
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:28px 24px;
+      display:flex;
+      align-items:center;
+      gap:20px;
+      transition:box-shadow .18s,transform .18s;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* bande couleur gauche */
+    .card::before{
+      content:'';
+      position:absolute;
+      left:0;top:0;bottom:0;
+      width:4px;
+      background:var(--card-color,#cbd5e1);
+      border-radius:14px 0 0 14px;
+    }
+
+    /* ── CARTE ACTIVE ──────────────────────────────── */
+    .card-active{
+      cursor:pointer;
+      --card-color:var(--coral);
+      text-decoration:none;
+      color:inherit;
+    }
+    .card-active:hover{
+      box-shadow:0 8px 32px rgba(29,59,107,.14);
+      transform:translateY(-3px);
+    }
+    .card-active .card-arrow{
+      margin-left:auto;
+      width:36px;height:36px;border-radius:50%;
+      background:var(--coral);
+      display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;
+      transition:background .15s;
+    }
+    .card-active:hover .card-arrow{background:#c94444}
+
+    /* couleurs accent pour la carte facturation */
+    .icon-factu{background:#fef3c7} .icon-factu svg{color:#d97706}
+
+    /* ── CARTE INACTIVE ────────────────────────────── */
+    .card-inactive{
+      opacity:.62;
+      cursor:not-allowed;
+      --card-color:#cbd5e1;
+    }
+
+    .badge-soon{
+      position:absolute;
+      top:12px;right:14px;
+      background:#e2e8f0;
+      color:#64748b;
+      font-size:9px;font-weight:600;
+      letter-spacing:.06em;text-transform:uppercase;
+      padding:3px 8px;border-radius:20px;
+    }
+    .badge-guide{
+      position:absolute;
+      top:12px;right:58px;          /* décalé pour ne pas chevaucher la flèche */
+      background:#4f46e5;
+      color:white;
+      font-size:9px;font-weight:600;
+      letter-spacing:.06em;text-transform:uppercase;
+      padding:3px 8px;border-radius:20px;
+      z-index:2;
+    }
+
+    /* ── ICÔNE SVG ─────────────────────────────────── */
+    .card-icon{
+      width:68px;height:68px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;
+    }
+    .card-icon svg{width:38px;height:38px}
+
+    .icon-planning {background:#e8f0fe} .icon-planning   svg{color:#2563eb}
+    .icon-visite    {background:#f0fdf4} .icon-visite      svg{color:#16a34a}
+    .icon-transport {background:#fff7ed} .icon-transport   svg{color:#ea580c}
+    .icon-conso     {background:#fdf4ff} .icon-conso       svg{color:#9333ea}
+    .icon-analyse   {background:#f0f9ff} .icon-analyse     svg{color:#0891b2}
+    .icon-fournisseur{background:#eef2ff} .icon-fournisseur svg{color:#4f46e5}
+
+    /* ── TEXTE CARTE ───────────────────────────────── */
+    .card-text{flex:1;min-width:0}
+    .card-title{
+      font-size:16px;font-weight:700;color:var(--navy);margin-bottom:4px;
+    }
+    .card-active .card-title{font-size:18px}
+    .card-desc{font-size:12px;color:var(--muted);line-height:1.5}
+
+    /* Limite la description à 2 lignes maxi sur les cartes "compactes" */
+    .card-2lines .card-desc{
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    /* ── FOOTER ────────────────────────────────────── */
+    footer{
+      text-align:center;
+      padding:14px 20px;
+      font-size:10px;
+      color:var(--muted);
+      border-top:1px solid var(--border);
+      background:white;
+      flex-shrink:0;
+    }
+
+    /* ── RESPONSIVE ────────────────────────────────── */
+    @media(max-width:720px){
+      .grid{grid-template-columns:1fr;max-width:420px}
+      .card-planning{grid-column:1}
+      header{padding:0 20px}
+      .grid-wrap{padding:0 20px 32px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <img src="Hemotech-logo-website-300x72.png.webp" alt="Hemotech — Pollet Medical Group">
+  </div>
+  <div class="header-right">
+    <div class="title">Portail TTE</div>
+    <div class="sub">Traitement de l'eau — Service technique</div>
+  </div>
+</header>
+<div class="header-line"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Bienvenue sur le portail Hemotech</h1>
+  <p>Accédez aux outils du service traitement de l'eau</p>
+</div>
+
+<!-- GRILLE -->
+<div class="grid-wrap">
+  <div class="grid">
+
+    <!-- ① PLANNING — actif -->
+    <a href="Planning.html" class="card card-active card-planning">
+      <div class="card-icon icon-planning">
+        <!-- Icône planning / Gantt -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+          <line x1="7" y1="15" x2="13" y2="15" stroke-width="2.5"/>
+          <line x1="7" y1="18" x2="11" y2="18" stroke-width="2.5"/>
+        </svg>
+      </div>
+      <div class="card-text">
+        <div class="card-title">Planning d'installation</div>
+        <div class="card-desc">Visualisez et gérez le Gantt des interventions TTE — installations, mises en service, qualifications eau.</div>
+      </div>
+      <div class="card-arrow">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </div>
+    </a>
+
+    <!-- ② ORDRE DE FACTURATION — actif -->
+    <a href="Ordre-Facturation.html" class="card card-active">
+      <div class="card-icon icon-factu">
+        <!-- Icône facture / euro -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <path d="M14 13a3 3 0 1 0 0 4"/>
+          <line x1="9" y1="14" x2="13" y2="14"/>
+          <line x1="9" y1="16" x2="13" y2="16"/>
+        </svg>
+      </div>
+      <div class="card-text">
+        <div class="card-title">Ordre de facturation client</div>
+        <div class="card-desc">Remplissez le formulaire et générez automatiquement le fichier Excel à transmettre à la comptabilité.</div>
+      </div>
+      <div class="card-arrow">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </div>
+    </a>
+
+    <!-- ③ DEMANDE TRANSPORT — actif -->
+    <a href="Demande-Transport.html" class="card card-active card-2lines">
+      <div class="card-icon icon-transport">
+        <!-- Icône camion -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="3" width="15" height="13" rx="1"/>
+          <path d="M16 8h4l3 5v4h-7V8z"/>
+          <circle cx="5.5" cy="18.5" r="2.5"/>
+          <circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+      </div>
+      <div class="card-text">
+        <div class="card-title">Demande de transport</div>
+        <div class="card-desc">Pour matériel et équipes terrain.</div>
+      </div>
+      <div class="card-arrow">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </div>
+    </a>
+
+    <!-- ④ COMMANDE FOURNISSEUR — actif (lien vers le guide Divalto) -->
+    <a href="Guide-Commande-Fournisseur.html" class="card card-active card-2lines">
+      <span class="badge-guide">📖 Guide</span>
+      <div class="card-icon icon-fournisseur">
+        <!-- Icône caddie / commande -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+      </div>
+      <div class="card-text">
+        <div class="card-title">Commande Fournisseur</div>
+        <div class="card-desc">Guide de saisie sur Divalto, pas à pas.</div>
+      </div>
+      <div class="card-arrow">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </div>
+    </a>
+
+    <!-- ④ DEMANDE CONSOMMABLE — inactif -->
+    <div class="card card-inactive">
+      <span class="badge-soon">Bientôt</span>
+      <div class="card-icon icon-conso">
+        <!-- Icône boîte / consommable -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+          <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg>
+      </div>
+      <div class="card-text">
+        <div class="card-title">Demande de consommables</div>
+        <div class="card-desc">Commandez filtres, réactifs, membranes et accessoires pour les systèmes de traitement d'eau.</div>
+      </div>
+    </div>
+
+    <!-- ⑥ DEMANDE ANALYSE HD/HDF — inactif -->
+    <div class="card card-inactive">
+      <span class="badge-soon">Bientôt</span>
+      <div class="card-icon icon-analyse">
+        <!-- Icône flacon analyse -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3h6v8l3.5 6.5A2 2 0 0 1 16.8 20H7.2a2 2 0 0 1-1.7-2.5L9 11V3z"/>
+          <line x1="9" y1="3" x2="15" y2="3"/>
+          <path d="M6.5 15.5h11"/>
+          <circle cx="10" cy="16.5" r=".6" fill="currentColor"/>
+          <circle cx="13.5" cy="17.5" r=".6" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="card-text">
+        <div class="card-title">Demande d'analyse HD/HDF</div>
+        <div class="card-desc">Soumettez vos demandes d'analyses microbiologiques et physico-chimiques pour hémodialyse.</div>
+      </div>
+    </div>
+
+    <!-- ⑦ VISITE CHANTIER — inactif (dernière position) -->
+    <div class="card card-inactive">
+      <span class="badge-soon">Bientôt</span>
+      <div class="card-icon icon-visite">
+        <!-- Icône casque chantier -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 18h20v2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-2z"/>
+          <path d="M12 3C8 3 5 6.5 4.5 11H19.5C19 6.5 16 3 12 3z"/>
+          <line x1="12" y1="3" x2="12" y2="11"/>
+          <line x1="4.5" y1="11" x2="19.5" y2="11"/>
+          <line x1="2" y1="18" x2="22" y2="18"/>
+        </svg>
+      </div>
+      <div class="card-text">
+        <div class="card-title">Visite de chantier</div>
+        <div class="card-desc">Planifiez et documentez vos visites de chantier, relevés techniques et états des lieux.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong style="color:var(--navy)">Hemotech</strong> — Pollet Medical Group &nbsp;·&nbsp; Service Traitement de l'Eau &nbsp;·&nbsp; © 2026
+</footer>
+
+</body>
+</html>
