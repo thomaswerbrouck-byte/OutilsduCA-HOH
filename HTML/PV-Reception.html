@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>PV Réception Installateur — Hemotech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --purple:#7C3AED;--purple-d:#6D28D9;--purple-l:#EDE9FE;
+      --orange:#E05328;--navy:#1B3557;--blue:#3B6BA5;
+      --light:#F4F7FB;--card:#ffffff;--border:#DDE5F0;
+      --text:#1E293B;--muted:#64748B;--green:#16A34A;
+    }
+    html,body{font-family:'Open Sans',Arial,sans-serif;background:var(--light);color:var(--text)}
+
+    /* ── SCREENS ── */
+    .screen{min-height:100vh;display:flex;flex-direction:column;transition:opacity .3s ease,transform .3s ease}
+    .screen-hide{display:none!important}
+
+    /* ── HEADER ── */
+    .site-header{background:#fff;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 0 var(--border);flex-shrink:0;position:relative}
+    .site-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--orange)}
+    .logo-wrap img{height:42px;display:block}
+    .header-badge{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+    .header-badge .badge-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--orange);background:#FEF0EC;border:1px solid #FBCFC4;border-radius:4px;padding:3px 10px}
+    .header-badge .badge-sub{font-size:10px;color:var(--muted);font-weight:500}
+
+    /* ── BACK BAR ── */
+    .back-bar{padding:14px 48px 0;flex-shrink:0}
+    .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--navy);text-decoration:none;font-size:13px;font-weight:500;padding:6px 12px;border-radius:6px;background:white;border:1px solid var(--border);transition:all .15s}
+    .back-link:hover{background:#f4f7fb;transform:translateX(-2px)}
+
+    /* ══ HUB ══════════════════════════════════════════════ */
+    main.hub{flex:1;padding:28px 40px 48px;max-width:900px;width:100%;margin:0 auto}
+    .hub-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:12px}
+    .hub-title{font-size:22px;font-weight:700;color:var(--navy)}
+    .hub-sub{font-size:12.5px;color:var(--muted);margin-bottom:24px}
+    .btn-new{display:inline-flex;align-items:center;gap:7px;background:var(--purple);color:white;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s}
+    .btn-new:hover{filter:brightness(.88)}
+    .list-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden}
+    .list-header{display:grid;grid-template-columns:1fr 130px 130px 215px;gap:12px;padding:10px 18px;background:#f8fafc;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+    .list-row{display:grid;grid-template-columns:1fr 130px 130px 215px;gap:12px;padding:12px 18px;border-bottom:.5px solid var(--border);align-items:center;transition:background .12s}
+    .list-row:last-child{border-bottom:none}
+    .list-row:hover{background:#fafbff}
+    .op-name{font-size:14px;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:8px}
+    .op-dot{width:8px;height:8px;border-radius:50%;background:var(--purple);flex-shrink:0}
+    .op-date{font-size:11.5px;color:var(--muted)}
+    .row-acts{display:flex;gap:6px;justify-content:flex-end}
+    .btn-sm{display:inline-flex;align-items:center;gap:4px;border:none;border-radius:6px;padding:5px 10px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s}
+    .btn-sm:hover{filter:brightness(.88)}
+    .btn-open{background:var(--purple);color:white}
+    .btn-ren{background:#f1f5f9;color:var(--navy)}
+    .btn-del{background:#fee2e2;color:#b91c1c}
+    .hub-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 24px;gap:14px;text-align:center}
+    .hub-empty-icon{width:64px;height:64px;border-radius:50%;background:var(--purple-l);display:flex;align-items:center;justify-content:center}
+    .hub-empty-icon svg{width:28px;height:28px;color:var(--purple)}
+    .hub-empty-title{font-size:15px;font-weight:700;color:var(--navy)}
+    .hub-empty-sub{font-size:13px;color:var(--muted);max-width:320px}
+    .hub-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;padding:16px}
+    .hub-overlay.show{display:flex}
+    .hub-modal{background:white;border-radius:14px;padding:28px 32px;width:380px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.22)}
+    .hub-modal h3{font-size:17px;font-weight:700;color:var(--navy);margin:0 0 16px}
+    .hub-modal .mhi{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:14px;font-family:inherit;outline:none;transition:border-color .15s}
+    .hub-modal .mhi:focus{border-color:var(--purple)}
+    .hub-modal-acts{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+    .btn-mcancel{background:#f1f5f9;color:var(--navy);border:none;border-radius:7px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+    .btn-mconfirm{background:var(--purple);color:white;border:none;border-radius:7px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+
+    /* ══ FORM TOPBAR ══════════════════════════════════════ */
+    .form-topbar{background:#fff;padding:0 48px;height:62px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--border);flex-shrink:0;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(27,53,87,.07)}
+    .btn-back{display:flex;align-items:center;gap:7px;color:var(--navy);font-size:13px;font-weight:600;font-family:inherit;background:none;border:1px solid var(--border);border-radius:8px;padding:8px 14px;cursor:pointer;transition:all .15s}
+    .btn-back:hover{background:var(--light);border-color:#b0c4de}
+    .btn-back svg{width:15px;height:15px}
+    .topbar-title{display:flex;align-items:center;gap:10px}
+    .topbar-icon{width:34px;height:34px;border-radius:8px;background:var(--purple-l);display:flex;align-items:center;justify-content:center}
+    .topbar-icon svg{width:17px;height:17px;color:var(--purple)}
+    .topbar-label{font-size:13px;font-weight:700;color:var(--navy)}
+    .topbar-sub{font-size:11px;color:var(--muted)}
+    .topbar-op{font-size:12px;font-weight:600;color:var(--purple);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+    /* ══ FORM BODY ════════════════════════════════════════ */
+    .form-body{max-width:840px;margin:0 auto;padding:28px 20px 140px;width:100%}
+
+    /* ── FORM CARD ── */
+    .fcard{background:#fff;border:1px solid var(--border);border-radius:12px;padding:26px 26px 20px;margin-bottom:20px}
+    .fcard-head{display:flex;align-items:center;gap:10px;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+    .fcard-num{width:28px;height:28px;border-radius:50%;background:var(--purple);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .fcard-title{font-size:15px;font-weight:700;color:var(--navy)}
+    .fcard-note{font-size:11px;color:var(--muted);font-weight:400;margin-left:auto;background:var(--light);padding:3px 10px;border-radius:20px;white-space:nowrap}
+
+    /* ── SUBSECTION ── */
+    .sub{margin-bottom:18px;padding:15px 18px;border-radius:8px;background:var(--light);border-left:3px solid var(--purple)}
+    .sub:last-child{margin-bottom:0}
+    .sub-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple);margin-bottom:14px}
+    .sub-navy{border-left-color:var(--navy)}.sub-navy .sub-title{color:var(--navy)}
+
+    /* ── FIELDS ── */
+    .fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+    .fg:last-child{margin-bottom:0}
+    .fr{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    label{font-size:12px;font-weight:600;color:var(--text)}
+    .lsub{font-size:11px;font-weight:400;color:var(--muted)}
+    input[type=text],input[type=date],input[type=tel],input[type=email]{width:100%;height:40px;padding:0 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;color:var(--text);font-family:inherit;background:#fff;transition:border-color .15s,box-shadow .15s}
+    input:focus,textarea:focus,select:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,.1)}
+    textarea{width:100%;min-height:80px;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;color:var(--text);font-family:inherit;resize:vertical;line-height:1.55;background:#fff;transition:border-color .15s,box-shadow .15s}
+
+    /* ── RADIO PILLS ── */
+    .rg{display:flex;gap:7px;flex-wrap:wrap}
+    .ro{display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:13px;font-weight:500;transition:all .15s;user-select:none}
+    .ro input{display:none}
+    .rd{width:13px;height:13px;border-radius:50%;border:2px solid #CBD5E1;transition:all .15s;flex-shrink:0}
+    .ro.sel{border-color:var(--purple);background:var(--purple-l);color:#5B21B6}
+    .ro.sel .rd{border-color:var(--purple);background:var(--purple)}
+
+    /* ── CONDITIONAL ── */
+    .cond{display:none;margin-top:10px}
+    .cond.show{display:block}
+
+    /* ── COMPOSANTS TABLE ── */
+    .comp-table{width:100%;border-collapse:collapse;font-size:12px}
+    .comp-table thead th{background:var(--navy);color:#fff;padding:8px 10px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+    .comp-table tbody tr{border-bottom:1px solid var(--border)}
+    .comp-table tbody tr:hover{background:#fafbff}
+    .comp-table tbody td{padding:7px 10px;vertical-align:middle}
+    .comp-name{font-weight:600;color:var(--navy)}
+    .comp-sel{height:32px;padding:0 6px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit;background:#fff;color:var(--text);cursor:pointer;min-width:56px}
+    .comp-sel:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 2px rgba(124,58,237,.1)}
+    .comp-comment{height:32px;padding:0 8px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit;background:#fff;width:100%}
+    .comp-comment:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 2px rgba(124,58,237,.1)}
+    .badge-note{background:#FEF9C3;border:1px solid #FDE68A;border-radius:7px;padding:8px 14px;font-size:12px;color:#92400E;margin-bottom:14px;display:flex;align-items:flex-start;gap:8px}
+    .badge-note svg{flex-shrink:0;margin-top:1px;width:15px;height:15px;color:#B45309}
+
+    /* ── DECISION RADIO LARGE ── */
+    .decision-rg{display:flex;flex-direction:column;gap:10px}
+    .decision-ro{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:8px;border:2px solid var(--border);background:#fff;cursor:pointer;transition:all .15s;user-select:none}
+    .decision-ro input{display:none}
+    .decision-rd{width:16px;height:16px;border-radius:50%;border:2px solid #CBD5E1;transition:all .15s;flex-shrink:0}
+    .decision-ro.sel{border-color:var(--purple);background:var(--purple-l)}
+    .decision-ro.sel .decision-rd{border-color:var(--purple);background:var(--purple)}
+    .decision-text{font-size:13px;font-weight:600;color:var(--navy)}
+
+    /* ── SIGNATURE PAD ── */
+    .sig-wrap{border:2px dashed var(--border);border-radius:10px;background:#FAFBFF;padding:12px}
+    .sig-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+    .sig-canvas{display:block;width:100%;height:130px;border-radius:6px;background:#fff;border:1px solid var(--border);cursor:crosshair;touch-action:none;position:relative}
+    .sig-hint-abs{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:12px;color:#CBD5E1;pointer-events:none;text-align:center;white-space:nowrap;z-index:1}
+    .sig-canvas-wrap{position:relative}
+    .sig-actions{display:flex;gap:8px;margin-top:8px;align-items:center}
+    .btn-sig-clear{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--muted);background:var(--light);border:1px solid var(--border);border-radius:5px;padding:5px 10px;cursor:pointer;font-family:inherit;transition:all .15s}
+    .btn-sig-clear:hover{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
+    .sig-hint-txt{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px;margin-left:auto}
+    .sig-hint-txt svg{width:13px;height:13px}
+
+    /* ── EXPORT BAR ── */
+    .export-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;z-index:300;box-shadow:0 -4px 24px rgba(27,53,87,.1);gap:12px}
+    .export-info{font-size:12px;color:var(--muted);line-height:1.5;flex:1;min-width:0}
+    .export-info strong{color:var(--navy)}
+    .export-btns{display:flex;gap:8px;flex-shrink:0}
+    .btn-export{display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:#fff;font-size:13px;font-weight:700;font-family:inherit;border:none;cursor:pointer;padding:11px 20px;border-radius:9px;box-shadow:0 4px 16px rgba(124,58,237,.3);transition:all .18s;white-space:nowrap}
+    .btn-export:hover{background:var(--purple-d);transform:translateY(-1px)}
+    .btn-export:disabled{opacity:.6;cursor:not-allowed;transform:none}
+    .btn-mail{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--purple);font-size:13px;font-weight:700;font-family:inherit;border:2px solid var(--purple);cursor:pointer;padding:9px 16px;border-radius:9px;transition:all .18s;white-space:nowrap}
+    .btn-mail:hover{background:var(--purple-l)}
+    .btn-export svg,.btn-mail svg{width:16px;height:16px;flex-shrink:0}
+
+    /* ── MAIL MODAL ── */
+    .mail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:16px}
+    .mail-overlay.show{display:flex}
+    .mail-modal{background:#fff;border-radius:14px;padding:28px 28px 24px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.22)}
+    .mail-modal-head{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+    .mail-modal-icon{width:44px;height:44px;border-radius:10px;background:var(--purple-l);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .mail-modal-icon svg{width:22px;height:22px;color:var(--purple)}
+    .mail-modal h3{font-size:16px;font-weight:700;color:var(--navy);margin:0}
+    .mail-modal-sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .mail-info-box{background:var(--light);border-radius:8px;padding:11px 14px;font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+    .mail-modal .fg{margin-bottom:14px}
+    .mail-modal-acts{display:flex;gap:8px;justify-content:flex-end}
+    .btn-mc{background:#f1f5f9;color:var(--navy);border:none;border-radius:7px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+    .btn-ms{background:var(--purple);color:white;border:none;border-radius:7px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:7px}
+    .btn-ms svg{width:15px;height:15px}
+
+    /* ── FOOTER ── */
+    footer{background:var(--navy);padding:18px 48px;flex-shrink:0}
+    .footer-inner{max-width:980px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+    .footer-left{display:flex;align-items:center;gap:14px}
+    .footer-left img{height:28px;opacity:.8;filter:brightness(0) invert(1)}
+    .fsep{width:1px;height:20px;background:rgba(255,255,255,.18)}
+    .footer-text{font-size:11px;color:rgba(255,255,255,.5)}
+    .footer-right{font-size:11px;color:rgba(255,255,255,.4)}
+    .footer-right span{color:var(--orange);font-weight:600}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:820px){
+      .site-header,.form-topbar{padding:0 16px}
+      .back-bar{padding:12px 16px 0}
+      main.hub{padding:20px 16px 48px}
+      .list-header,.list-row{grid-template-columns:1fr auto}
+      .col-crd,.col-mod{display:none}
+      .form-body{padding:20px 14px 140px}
+      .fcard{padding:18px 14px 14px}
+      .fr{grid-template-columns:1fr}
+      footer{padding:14px 16px}
+      .export-bar{padding:12px 14px}
+      .topbar-op{max-width:160px}
+    }
+    @media(max-width:480px){
+      .export-btns{flex-direction:column}
+      .btn-export,.btn-mail{justify-content:center;font-size:12px;padding:10px 14px}
+      .export-info{display:none}
+      .comp-table .col-comment{display:none}
+      .topbar-label{display:none}
+    }
+    @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     ÉCRAN 1 — HUB
+══════════════════════════════════════════════════════════ -->
+<div id="s1" class="screen">
+
+  <header class="site-header">
+    <div class="logo-wrap">
+      <img src="../Hemotech-logo-website-300x72.png.webp" alt="Hemotech — Pollet Medical Group">
+    </div>
+    <div class="header-badge">
+      <div class="badge-label">Portail TTE</div>
+      <div class="badge-sub">Traitement de l'eau · Service technique</div>
+    </div>
+  </header>
+
+  <div class="back-bar">
+    <a href="../index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Retour au portail
+    </a>
+  </div>
+
+  <main class="hub">
+    <div class="hub-top">
+      <div>
+        <h1 class="hub-title">PV Réception Installateur</h1>
+      </div>
+      <button class="btn-new" onclick="ouvrirModalCreer()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nouveau PV
+      </button>
+    </div>
+    <p class="hub-sub">Cliquez sur <em>Ouvrir</em> pour consulter ou modifier un PV existant.</p>
+
+    <div class="list-card">
+      <div class="list-header">
+        <div>Nom d'opération</div>
+        <div class="col-crd">Créé le</div>
+        <div class="col-mod">Modifié le</div>
+        <div style="text-align:right">Actions</div>
+      </div>
+      <div id="listBody"></div>
+    </div>
+  </main>
+
+  <!-- Modal création / renommage -->
+  <div class="hub-overlay" id="hubOverlay" onclick="if(event.target===this)fermerModal()">
+    <div class="hub-modal">
+      <h3 id="modalTitle">Nouveau PV de réception</h3>
+      <input class="mhi" id="modalInput" type="text" placeholder="Ex : Clinique Dupont — Roubaix" maxlength="80">
+      <div class="hub-modal-acts">
+        <button class="btn-mcancel" onclick="fermerModal()">Annuler</button>
+        <button class="btn-mconfirm" onclick="confirmerModal()">Confirmer</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">
+        <img src="../Hemotech-logo-website-300x72.png.webp" alt="Hemotech">
+        <div class="fsep"></div>
+        <div class="footer-text">Service Traitement de l'Eau &nbsp;·&nbsp; Pollet Medical Group</div>
+      </div>
+      <div class="footer-right">© 2026 &nbsp;<span>Hemotech</span> &nbsp;· Usage interne uniquement</div>
+    </div>
+  </footer>
+
+</div><!-- /s1 -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     ÉCRAN 2 — FORMULAIRE
+══════════════════════════════════════════════════════════ -->
+<div id="s2" class="screen screen-hide">
+
+  <!-- Topbar sticky -->
+  <div class="form-topbar">
+    <button class="btn-back" onclick="goToAccueil()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Retour à la liste
+    </button>
+    <div class="topbar-title">
+      <div class="topbar-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 11l3 3L22 4"/>
+          <path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h9"/>
+        </svg>
+      </div>
+      <div>
+        <div class="topbar-label">PV Réception Installateur</div>
+        <div class="topbar-op" id="topbar-op">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Corps du formulaire -->
+  <div class="form-body">
+
+    <!-- ① Identification -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">1</div>
+        <div class="fcard-title">Identification du projet</div>
+      </div>
+      <div class="fr">
+        <div class="fg">
+          <label for="f-client">Client / Établissement</label>
+          <input type="text" id="f-client" placeholder="Nom du client">
+        </div>
+        <div class="fg">
+          <label for="f-adresse">Adresse du site</label>
+          <input type="text" id="f-adresse" placeholder="Adresse complète">
+        </div>
+      </div>
+    </div>
+
+    <!-- ② Interlocuteurs -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">2</div>
+        <div class="fcard-title">Interlocuteurs</div>
+      </div>
+      <div class="sub">
+        <div class="sub-title">HEMOTECH</div>
+        <div class="fg">
+          <label for="f-hemo-rep">Représenté par</label>
+          <input type="text" id="f-hemo-rep" value="Thomas WERBROUCK" placeholder="Nom du représentant">
+        </div>
+      </div>
+      <div class="sub" style="margin-top:14px">
+        <div class="sub-title">INSTALLATEUR</div>
+        <div class="fr">
+          <div class="fg">
+            <label for="f-inst-ent">Entreprise</label>
+            <input type="text" id="f-inst-ent" placeholder="Nom de l'entreprise">
+          </div>
+          <div class="fg">
+            <label for="f-inst-rep">Représenté par</label>
+            <input type="text" id="f-inst-rep" placeholder="Nom du représentant">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ Dates de chantier -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">3</div>
+        <div class="fcard-title">Dates de chantier</div>
+      </div>
+      <div class="fr">
+        <div class="fg">
+          <label for="f-date-debut">Date de début</label>
+          <input type="date" id="f-date-debut">
+        </div>
+        <div class="fg">
+          <label for="f-date-fin">Date de fin</label>
+          <input type="date" id="f-date-fin">
+        </div>
+      </div>
+    </div>
+
+    <!-- ④ Schémas et plans -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">4</div>
+        <div class="fcard-title">Schémas et plans</div>
+      </div>
+      <div class="fr" style="margin-bottom:14px">
+        <div class="fg">
+          <label>Schéma de principe</label>
+          <div class="rg" id="rg-schema">
+            <label class="ro" onclick="selRg(this,'rg-schema')"><input type="radio" name="schema" value="OUI"><span class="rd"></span>OUI</label>
+            <label class="ro" onclick="selRg(this,'rg-schema')"><input type="radio" name="schema" value="NON"><span class="rd"></span>NON</label>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Plan de réseau</label>
+          <div class="rg" id="rg-reseau">
+            <label class="ro" onclick="selRg(this,'rg-reseau')"><input type="radio" name="reseau" value="OUI"><span class="rd"></span>OUI</label>
+            <label class="ro" onclick="selRg(this,'rg-reseau')"><input type="radio" name="reseau" value="NON"><span class="rd"></span>NON</label>
+          </div>
+        </div>
+      </div>
+      <div class="fr">
+        <div class="fg">
+          <label>Plan d'implantation</label>
+          <div class="rg" id="rg-implant">
+            <label class="ro" onclick="selRg(this,'rg-implant')"><input type="radio" name="implant" value="OUI"><span class="rd"></span>OUI</label>
+            <label class="ro" onclick="selRg(this,'rg-implant')"><input type="radio" name="implant" value="NON"><span class="rd"></span>NON</label>
+          </div>
+        </div>
+        <div class="fg">
+          <label for="f-autre-plan">Autre plan <span class="lsub">(préciser)</span></label>
+          <input type="text" id="f-autre-plan" placeholder="Intitulé du plan">
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑤ Fournitures client -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">5</div>
+        <div class="fcard-title">Fournitures client</div>
+      </div>
+      <div class="fr">
+        <div class="fg">
+          <label>Alimentation électrique définitive</label>
+          <div class="rg" id="rg-elec">
+            <label class="ro" onclick="selRg(this,'rg-elec')"><input type="radio" name="alim-elec" value="OUI"><span class="rd"></span>OUI</label>
+            <label class="ro" onclick="selRg(this,'rg-elec')"><input type="radio" name="alim-elec" value="NON"><span class="rd"></span>NON</label>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Alimentation en eau définitive</label>
+          <div class="rg" id="rg-eau">
+            <label class="ro" onclick="selRg(this,'rg-eau')"><input type="radio" name="alim-eau" value="OUI"><span class="rd"></span>OUI</label>
+            <label class="ro" onclick="selRg(this,'rg-eau')"><input type="radio" name="alim-eau" value="NON"><span class="rd"></span>NON</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑥ Remarques générales -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">6</div>
+        <div class="fcard-title">Remarques générales</div>
+      </div>
+      <div class="fg">
+        <textarea id="f-rem-gen" rows="4" placeholder="Remarques générales sur le chantier…"></textarea>
+      </div>
+    </div>
+
+    <!-- ⑦ Liste des composants -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">7</div>
+        <div class="fcard-title">Liste des composants</div>
+      </div>
+      <div class="badge-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>Si l'eau n'est pas présente lors de la réception, les tests seront faits au gaz neutre.&nbsp;
+          <strong>OK</strong> = Correct &nbsp;·&nbsp; <strong>KO</strong> = Non correct &nbsp;·&nbsp; <strong>NT</strong> = Non testé</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th style="width:34%">Composant</th>
+              <th style="width:13%">Présent</th>
+              <th style="width:12%">Statut</th>
+              <th class="col-comment">Commentaires</th>
+            </tr>
+          </thead>
+          <tbody id="comp-body"></tbody>
+        </table>
+      </div>
+      <div class="fr" style="margin-top:18px">
+        <div class="fg">
+          <label for="f-rem-comp">Remarques</label>
+          <textarea id="f-rem-comp" rows="3" placeholder="Remarques sur les composants…"></textarea>
+        </div>
+        <div class="fg">
+          <label for="f-manquants">Éléments manquants ou en défaut</label>
+          <textarea id="f-manquants" rows="3" placeholder="Lister les éléments manquants…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑧ Distribution centralisée -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">8</div>
+        <div class="fcard-title">Distribution centralisée de concentré</div>
+      </div>
+      <div class="fg" style="margin-bottom:18px">
+        <label>Présente sur le site</label>
+        <div class="rg" id="rg-distrib">
+          <label class="ro" onclick="selRg(this,'rg-distrib');toggleDistrib()"><input type="radio" name="distrib" value="OUI"><span class="rd"></span>OUI</label>
+          <label class="ro" onclick="selRg(this,'rg-distrib');toggleDistrib()"><input type="radio" name="distrib" value="NON"><span class="rd"></span>NON</label>
+        </div>
+      </div>
+      <div id="distrib-section" class="cond">
+        <div style="overflow-x:auto">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th style="width:40%">Composant</th>
+                <th style="width:13%">Présent</th>
+                <th style="width:12%">Statut</th>
+                <th class="col-comment">Commentaires</th>
+              </tr>
+            </thead>
+            <tbody id="distrib-body"></tbody>
+          </table>
+        </div>
+        <div class="fr" style="margin-top:18px">
+          <div class="fg">
+            <label for="f-rem-distrib">Remarques</label>
+            <textarea id="f-rem-distrib" rows="3" placeholder="Remarques sur la distribution…"></textarea>
+          </div>
+          <div class="fg">
+            <label for="f-manquants-distrib">Éléments manquants ou en défaut</label>
+            <textarea id="f-manquants-distrib" rows="3" placeholder="Lister les éléments manquants…"></textarea>
+          </div>
+        </div>
+      </div>
+      <div id="distrib-non" style="display:none;padding:14px;text-align:center;color:var(--muted);font-size:13px;font-style:italic">
+        Aucune distribution centralisée de concentré sur ce site.
+      </div>
+    </div>
+
+    <!-- ⑨ Suggestions -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">9</div>
+        <div class="fcard-title">Suggestions pour améliorer les futures installations</div>
+      </div>
+      <div class="fg">
+        <textarea id="f-suggestions" rows="4" placeholder="Suggestions pour améliorer les prochaines installations…"></textarea>
+      </div>
+    </div>
+
+    <!-- ⑩ PV de réception -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">10</div>
+        <div class="fcard-title">Procès-verbal de réception</div>
+      </div>
+      <div class="fg" style="margin-bottom:18px">
+        <label for="f-date-recep">Date de réception des travaux</label>
+        <input type="date" id="f-date-recep" style="max-width:260px">
+      </div>
+      <div class="fg">
+        <label>Décision du représentant HEMOTECH</label>
+        <div class="decision-rg">
+          <label class="decision-ro" id="dec-sans" onclick="selDecision(this,'sans')">
+            <input type="radio" name="decision" value="sans">
+            <span class="decision-rd"></span>
+            <div class="decision-text">Réception prononcée SANS RÉSERVE</div>
+          </label>
+          <label class="decision-ro" id="dec-avec" onclick="selDecision(this,'avec')">
+            <input type="radio" name="decision" value="avec">
+            <span class="decision-rd"></span>
+            <div class="decision-text">Réception prononcée AVEC LES RÉSERVES SUIVANTES</div>
+          </label>
+        </div>
+      </div>
+      <div id="reserves-section" class="cond" style="margin-top:14px">
+        <div class="fg">
+          <label for="f-reserves">Réserves <span class="lsub">(détailler)</span></label>
+          <textarea id="f-reserves" rows="5" placeholder="Listez les réserves formulées…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑪ Signatures -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">11</div>
+        <div class="fcard-title">Signatures</div>
+      </div>
+      <div class="fr" style="margin-bottom:20px">
+        <div class="fg">
+          <label for="f-lieu-sig">Lieu</label>
+          <input type="text" id="f-lieu-sig" placeholder="Ville de signature">
+        </div>
+        <div class="fg">
+          <label for="f-date-sig">Date</label>
+          <input type="date" id="f-date-sig">
+        </div>
+      </div>
+      <div class="fr">
+        <!-- Signature Installateur -->
+        <div>
+          <div class="sig-wrap">
+            <div class="sig-label">Signature de l'Installateur</div>
+            <div class="sig-canvas-wrap">
+              <canvas class="sig-canvas" id="sig-inst" height="260"></canvas>
+              <div class="sig-hint-abs" id="hint-inst">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:4px"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg><br>
+                Signez ici
+              </div>
+            </div>
+            <div class="sig-actions">
+              <button class="btn-sig-clear" onclick="clearSig('sig-inst','hint-inst')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                Effacer
+              </button>
+              <span class="sig-hint-txt">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                Tactile OK
+              </span>
+            </div>
+          </div>
+        </div>
+        <!-- Signature HEMOTECH -->
+        <div>
+          <div class="sig-wrap">
+            <div class="sig-label">Signature HEMOTECH</div>
+            <div class="sig-canvas-wrap">
+              <canvas class="sig-canvas" id="sig-hemo" height="260"></canvas>
+              <div class="sig-hint-abs" id="hint-hemo">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:4px"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg><br>
+                Signez ici
+              </div>
+            </div>
+            <div class="sig-actions">
+              <button class="btn-sig-clear" onclick="clearSig('sig-hemo','hint-hemo')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                Effacer
+              </button>
+              <span class="sig-hint-txt">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                Tactile OK
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑫ Levée des réserves -->
+    <div class="fcard" id="section-levee" style="display:none">
+      <div class="fcard-head">
+        <div class="fcard-num">12</div>
+        <div class="fcard-title">Procès-verbal de levée des réserves</div>
+        <span class="fcard-note">Optionnel</span>
+      </div>
+      <div class="fg">
+        <label for="f-levee-nom">Nom, prénom et qualité du représentant HEMOTECH</label>
+        <input type="text" id="f-levee-nom" placeholder="Nom Prénom — Qualité">
+      </div>
+      <div class="fr">
+        <div class="fg">
+          <label for="f-levee-effet">Levée des réserves à effet du</label>
+          <input type="date" id="f-levee-effet">
+        </div>
+        <div class="fg">
+          <label for="f-levee-lieu">Fait à</label>
+          <input type="text" id="f-levee-lieu" placeholder="Ville">
+        </div>
+      </div>
+      <div class="fg">
+        <label for="f-levee-date">Le</label>
+        <input type="date" id="f-levee-date" style="max-width:220px">
+      </div>
+    </div>
+
+  </div><!-- /form-body -->
+
+  <!-- EXPORT BAR -->
+  <div class="export-bar">
+    <div class="export-info">
+      <strong id="export-op-name">PV Réception Installateur</strong><br>
+      Générez le Word, puis envoyez-le par e-mail.
+    </div>
+    <div class="export-btns">
+      <button class="btn-mail" onclick="openMailModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Envoyer par e-mail
+      </button>
+      <button class="btn-export" id="btn-export" onclick="exportWord()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Générer le Word
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIL MODAL -->
+  <div class="mail-overlay" id="mail-overlay" onclick="if(event.target===this)closeMailModal()">
+    <div class="mail-modal">
+      <div class="mail-modal-head">
+        <div class="mail-modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div>
+          <h3>Envoyer le PV par e-mail</h3>
+          <div class="mail-modal-sub">Le fichier Word sera téléchargé automatiquement</div>
+        </div>
+      </div>
+      <div class="mail-info-box">
+        Le document sera généré et téléchargé sur votre appareil.<br>
+        Votre messagerie s'ouvrira avec l'objet pré-rempli — joignez simplement le fichier téléchargé.
+      </div>
+      <div class="fg">
+        <label for="mail-to">Adresse e-mail du destinataire</label>
+        <input type="email" id="mail-to" placeholder="destinataire@exemple.fr">
+      </div>
+      <div class="fg">
+        <label for="mail-cc">Copie (CC) <span class="lsub">— optionnel</span></label>
+        <input type="email" id="mail-cc" placeholder="cc@exemple.fr">
+      </div>
+      <div class="mail-modal-acts">
+        <button class="btn-mc" onclick="closeMailModal()">Annuler</button>
+        <button class="btn-ms" onclick="sendMail()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Télécharger &amp; Envoyer
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /s2 -->
+
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   DONNÉES COMPOSANTS
+══════════════════════════════════════════════════════════ */
+var COMPOSANTS = [
+  {id:'disconnecteur',    name:'Disconnecteur'},
+  {id:'surpresseur',      name:'Surpresseur'},
+  {id:'armoire-surp',     name:'Armoire surpresseur'},
+  {id:'coffret-elec',     name:'Coffret électrique'},
+  {id:'compteur',         name:'Compteur'},
+  {id:'dosatron',         name:'Pompe Dosatron'},
+  {id:'filtre-sable',     name:'Filtre à sable'},
+  {id:'filtre-poche',     name:'Filtre à poche'},
+  {id:'filtration-1',     name:'Filtration 1er étage', hasType:true},
+  {id:'adoucisseur',      name:'Adoucisseurs', hasType:true},
+  {id:'charbon',          name:'Charbon actif', hasType:true},
+  {id:'filtration-2',     name:'Filtration 2ème étage', hasType:true},
+  {id:'analyseur-dur',    name:'Analyseur de dureté', hasType:true},
+  {id:'analyseur-chlore', name:'Analyseur de chlore', hasType:true},
+  {id:'soupape',          name:'Soupape de décharge'},
+  {id:'manometre',        name:'Manomètre'},
+  {id:'point-ech',        name:"Point d'échantillon"},
+  {id:'osmoseur',         name:'Osmoseur'},
+  {id:'voyants',          name:'Report de voyants'},
+  {id:'filtration-ster',  name:'Filtration stérilisante'},
+  {id:'evacuation',       name:'Évacuation'},
+  {id:'puisage-m',        name:'Puisage raccord M'},
+  {id:'puisage-f',        name:'Puisage raccord F'},
+];
+
+var DISTRIB_COMPS = [
+  {id:'d-cnx-hydro',  name:'Connexions hydrauliques aux transi-cuves ou cuves de stockage'},
+  {id:'d-logique',    name:'Logique de fonctionnement'},
+  {id:'d-pompes',     name:'Pompes de relevage'},
+  {id:'d-pot-relais', name:'Pot relais'},
+  {id:'d-circuit',    name:'Circuit de distribution'},
+  {id:'d-armoire',    name:'Armoire de commande'},
+  {id:'d-voyants',    name:'Report de voyants'},
+  {id:'d-raccord-m',  name:'Raccords rapides M'},
+  {id:'d-raccord-f',  name:'Raccords rapides F'},
+];
+
+function buildCompRow(c) {
+  return '<tr>' +
+    '<td><div class="comp-name">' + esc(c.name) + '</div>' +
+    (c.hasType ? '<div style="margin-top:4px"><input class="comp-comment" type="text" id="' + c.id + '-type" placeholder="Type…"></div>' : '') +
+    '</td>' +
+    '<td><select class="comp-sel" id="' + c.id + '-present"><option value="">—</option><option>OUI</option><option>NON</option></select></td>' +
+    '<td><select class="comp-sel" id="' + c.id + '-statut"><option value="">—</option><option>OK</option><option>KO</option><option>NT</option></select></td>' +
+    '<td class="col-comment"><input class="comp-comment" type="text" id="' + c.id + '-comment" placeholder="Commentaire…"></td>' +
+    '</tr>';
+}
+
+document.getElementById('comp-body').innerHTML    = COMPOSANTS.map(buildCompRow).join('');
+document.getElementById('distrib-body').innerHTML = DISTRIB_COMPS.map(buildCompRow).join('');
+
+
+/* ══════════════════════════════════════════════════════════
+   NAVIGATION HUB ↔ FORMULAIRE
+══════════════════════════════════════════════════════════ */
+var currentEntryId = null;
+
+function goToForm() {
+  var s1 = document.getElementById('s1');
+  var s2 = document.getElementById('s2');
+  s1.style.opacity = '0';
+  s1.style.transform = 'translateY(-10px)';
+  setTimeout(function() {
+    s1.classList.add('screen-hide');
+    s2.classList.remove('screen-hide');
+    s2.style.opacity = '0';
+    s2.style.transform = 'translateY(10px)';
+    s2.getBoundingClientRect();
+    s2.style.transition = 'opacity .3s ease, transform .3s ease';
+    s2.style.opacity = '1';
+    s2.style.transform = 'translateY(0)';
+    window.scrollTo({top:0, behavior:'instant'});
+    // Init signatures après affichage
+    requestAnimationFrame(function() { initSig('sig-inst','hint-inst'); initSig('sig-hemo','hint-hemo'); });
+  }, 280);
+}
+
+function goToAccueil() {
+  hubSauver();
+  currentEntryId = null;
+  var s1 = document.getElementById('s1');
+  var s2 = document.getElementById('s2');
+  s2.style.opacity = '0';
+  s2.style.transform = 'translateY(10px)';
+  setTimeout(function() {
+    s2.classList.add('screen-hide');
+    s1.classList.remove('screen-hide');
+    s1.style.transition = 'opacity .3s ease, transform .3s ease';
+    s1.style.opacity = '1';
+    s1.style.transform = 'translateY(0)';
+    window.scrollTo({top:0, behavior:'instant'});
+    rendreListe();
+  }, 280);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   HUB — PERSISTANCE localStorage
+══════════════════════════════════════════════════════════ */
+var HUB_KEY = 'pv_reception_index';
+
+function hubChargerIndex() { try { return JSON.parse(localStorage.getItem(HUB_KEY)) || []; } catch(e) { return []; } }
+function hubSauverIndex(d) { localStorage.setItem(HUB_KEY, JSON.stringify(d)); }
+
+function hubCollectForm() {
+  var data = {};
+  // Inputs, selects, textareas avec ID dans #s2
+  document.querySelectorAll('#s2 input[id],#s2 select[id],#s2 textarea[id]').forEach(function(el) {
+    if (el.type === 'radio' || el.type === 'checkbox') return;
+    data[el.id] = el.value;
+  });
+  // Radios cochés
+  document.querySelectorAll('#s2 input[type=radio]:checked').forEach(function(el) {
+    if (el.name) data['_radio_' + el.name] = el.value;
+  });
+  // Signatures (canvas → base64)
+  var sI = getSigDataURL('sig-inst'); if (sI) data['_sig_inst'] = sI;
+  var sH = getSigDataURL('sig-hemo'); if (sH) data['_sig_hemo'] = sH;
+  return data;
+}
+
+function hubRestoreForm(data) {
+  if (!data) return;
+  // Champs texte / select / textarea
+  Object.keys(data).forEach(function(key) {
+    if (key.startsWith('_')) return;
+    var el = document.getElementById(key);
+    if (el && el.type !== 'radio' && el.type !== 'checkbox') el.value = data[key] || '';
+  });
+  // Radios
+  Object.keys(data).forEach(function(key) {
+    if (!key.startsWith('_radio_')) return;
+    var name = key.substring(7), val = data[key];
+    var el = document.querySelector('#s2 input[name="' + name + '"][value="' + val + '"]');
+    if (el) el.checked = true;
+  });
+  // Maj UI radios pills
+  setTimeout(function() {
+    document.querySelectorAll('#s2 .rg').forEach(function(rg) {
+      var chk = rg.querySelector('input[type=radio]:checked');
+      if (chk) { var ro = chk.closest('.ro'); if (ro) selRg(ro, rg.id); }
+    });
+    // Décision
+    var dec = document.querySelector('#s2 input[name=decision]:checked');
+    if (dec) { var ro = dec.closest('.decision-ro'); if (ro) selDecision(ro, dec.value); }
+    toggleDistrib();
+  }, 30);
+  // Signatures
+  if (data['_sig_inst']) restoreSig('sig-inst', 'hint-inst', data['_sig_inst']);
+  if (data['_sig_hemo']) restoreSig('sig-hemo', 'hint-hemo', data['_sig_hemo']);
+}
+
+function hubSauver() {
+  if (!currentEntryId) return;
+  try {
+    var data = hubCollectForm();
+    localStorage.setItem(HUB_KEY + '_' + currentEntryId, JSON.stringify(data));
+    var idx = hubChargerIndex().map(function(e) {
+      return e.id === currentEntryId ? Object.assign({}, e, {dateModif: new Date().toISOString()}) : e;
+    });
+    hubSauverIndex(idx);
+  } catch(ex) { console.warn('Sauvegarde échouée', ex); }
+}
+
+function hubCharger(id) {
+  try {
+    var data = JSON.parse(localStorage.getItem(HUB_KEY + '_' + id));
+    if (data) hubRestoreForm(data);
+  } catch(ex) { console.warn('Chargement échoué', ex); }
+}
+
+function resetForm() {
+  document.querySelectorAll('#s2 input[id],#s2 select[id],#s2 textarea[id]').forEach(function(el) {
+    if (el.type === 'radio' || el.type === 'checkbox') return;
+    if (el.id === 'f-hemo-rep') { el.value = 'Thomas WERBROUCK'; return; }
+    if (el.id === 'f-date-sig' || el.id === 'f-date-recep') { el.value = new Date().toISOString().slice(0,10); return; }
+    el.value = '';
+  });
+  document.querySelectorAll('#s2 input[type=radio]').forEach(function(el) { el.checked = false; });
+  document.querySelectorAll('#s2 .ro.sel').forEach(function(r) { r.classList.remove('sel'); });
+  document.querySelectorAll('#s2 .decision-ro.sel').forEach(function(r) { r.classList.remove('sel'); });
+  document.getElementById('reserves-section').classList.remove('show');
+  document.getElementById('section-levee').style.display = 'none';
+  document.getElementById('distrib-section').classList.remove('show');
+  document.getElementById('distrib-non').style.display = 'none';
+  clearSig('sig-inst', 'hint-inst');
+  clearSig('sig-hemo', 'hint-hemo');
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('fr-FR', {day:'2-digit', month:'2-digit', year:'numeric'});
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function rendreListe() {
+  var idx = hubChargerIndex();
+  var lb  = document.getElementById('listBody');
+  if (!lb) return;
+  if (idx.length === 0) {
+    lb.innerHTML = '<div class="hub-empty">' +
+      '<div class="hub-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h9"/></svg></div>' +
+      '<h3 class="hub-empty-title">Aucun PV de réception</h3>' +
+      '<p class="hub-empty-sub">Cliquez sur « + Nouveau PV » pour commencer.</p></div>';
+    return;
+  }
+  lb.innerHTML = idx.map(function(e) {
+    return '<div class="list-row">' +
+      '<div class="op-name"><span class="op-dot"></span>' + esc(e.nom) + '</div>' +
+      '<div class="op-date col-crd">' + fmtDate(e.dateCrea) + '</div>' +
+      '<div class="op-date col-mod">' + fmtDate(e.dateModif) + '</div>' +
+      '<div class="row-acts">' +
+        '<button class="btn-sm btn-open" onclick="hubOuvrir(\'' + e.id + '\')">Ouvrir</button>' +
+        '<button class="btn-sm btn-ren"  onclick="ouvrirModalRenommer(\'' + e.id + '\',\'' + esc(e.nom) + '\')">Renommer</button>' +
+        '<button class="btn-sm btn-del"  onclick="hubSupprimer(\'' + e.id + '\')">Supprimer</button>' +
+      '</div></div>';
+  }).join('');
+}
+
+/* ── MODAL ── */
+var hubModalMode = 'create'; var hubRenameId = null;
+
+function ouvrirModalCreer() {
+  hubModalMode = 'create'; hubRenameId = null;
+  document.getElementById('modalTitle').textContent = 'Nouveau PV de réception';
+  document.getElementById('modalInput').value = '';
+  document.getElementById('hubOverlay').classList.add('show');
+  setTimeout(function() { document.getElementById('modalInput').focus(); }, 80);
+}
+
+function ouvrirModalRenommer(id, nom) {
+  hubModalMode = 'rename'; hubRenameId = id;
+  document.getElementById('modalTitle').textContent = 'Renommer le PV';
+  document.getElementById('modalInput').value = nom;
+  document.getElementById('hubOverlay').classList.add('show');
+  setTimeout(function() { document.getElementById('modalInput').focus(); }, 80);
+}
+
+function fermerModal() { document.getElementById('hubOverlay').classList.remove('show'); }
+
+function confirmerModal() {
+  var nom = (document.getElementById('modalInput').value || '').trim();
+  if (!nom) return;
+  if (hubModalMode === 'create') {
+    var id  = 'pv' + Date.now();
+    var idx = hubChargerIndex();
+    idx.push({id: id, nom: nom, dateCrea: new Date().toISOString(), dateModif: new Date().toISOString()});
+    hubSauverIndex(idx);
+    fermerModal();
+    currentEntryId = id;
+    resetForm();
+    document.getElementById('topbar-op').textContent = nom;
+    document.getElementById('export-op-name').textContent = nom;
+    goToForm();
+  } else {
+    var idx = hubChargerIndex().map(function(e) { return e.id === hubRenameId ? Object.assign({}, e, {nom: nom}) : e; });
+    hubSauverIndex(idx);
+    fermerModal();
+    rendreListe();
+  }
+}
+
+function hubSupprimer(id) {
+  if (!confirm('Supprimer ce PV ? Cette action est irréversible.')) return;
+  var idx = hubChargerIndex().filter(function(e) { return e.id !== id; });
+  hubSauverIndex(idx);
+  localStorage.removeItem(HUB_KEY + '_' + id);
+  rendreListe();
+}
+
+function hubOuvrir(id) {
+  currentEntryId = id;
+  var idx = hubChargerIndex();
+  var entry = idx.find(function(e) { return e.id === id; });
+  var nom = entry ? entry.nom : '—';
+  document.getElementById('topbar-op').textContent = nom;
+  document.getElementById('export-op-name').textContent = nom;
+  resetForm();
+  goToForm();
+  setTimeout(function() { hubCharger(id); }, 60);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') fermerModal();
+  if (e.key === 'Enter' && document.getElementById('hubOverlay').classList.contains('show')) { e.preventDefault(); confirmerModal(); }
+});
+
+
+/* ══════════════════════════════════════════════════════════
+   RADIO HELPERS
+══════════════════════════════════════════════════════════ */
+function selRg(lbl, groupId) {
+  document.querySelectorAll('#' + groupId + ' .ro').forEach(function(r) { r.classList.remove('sel'); });
+  lbl.classList.add('sel');
+  var inp = lbl.querySelector('input[type=radio]');
+  if (inp) inp.checked = true;
+}
+
+function getRadio(groupId) {
+  var el = document.querySelector('#' + groupId + ' .ro.sel input');
+  return el ? el.value : '—';
+}
+
+function selDecision(lbl, type) {
+  document.querySelectorAll('.decision-ro').forEach(function(r) { r.classList.remove('sel'); });
+  lbl.classList.add('sel');
+  var inp = lbl.querySelector('input[type=radio]');
+  if (inp) inp.checked = true;
+  document.getElementById('reserves-section').classList.toggle('show', type === 'avec');
+  document.getElementById('section-levee').style.display = type === 'avec' ? 'block' : 'none';
+}
+
+function toggleDistrib() {
+  var val = getRadio('rg-distrib');
+  document.getElementById('distrib-section').classList.toggle('show', val === 'OUI');
+  document.getElementById('distrib-non').style.display = val === 'NON' ? 'block' : 'none';
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   SIGNATURE PAD
+══════════════════════════════════════════════════════════ */
+var sigStates = {};
+
+function initSig(canvasId, hintId) {
+  var canvas = document.getElementById(canvasId);
+  var hint   = document.getElementById(hintId);
+  var dpr    = window.devicePixelRatio || 1;
+  var rect   = canvas.parentElement.getBoundingClientRect();
+  var w      = Math.max(rect.width || 260, 200);
+  var h      = 130;
+  // Sauvegarder dataURL si déjà signé avant redimensionnement
+  var prevDataURL = null;
+  var prevState   = sigStates[canvasId];
+  if (prevState && !prevState.empty) { try { prevDataURL = canvas.toDataURL('image/png'); } catch(e){} }
+  canvas.width       = w * dpr;
+  canvas.height      = h * dpr;
+  canvas.style.width  = w + 'px';
+  canvas.style.height = h + 'px';
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  sigStates[canvasId] = {ctx: ctx, dpr: dpr, drawing: false, empty: true, w: w, h: h};
+  // Restaurer si signature existante
+  if (prevDataURL) {
+    restoreSig(canvasId, hintId, prevDataURL);
+  }
+  // Événements souris
+  canvas.addEventListener('mousedown',  function(ev) { startDraw(canvasId, ev); }, {passive:false});
+  canvas.addEventListener('mousemove',  function(ev) { draw(canvasId, ev); },      {passive:false});
+  canvas.addEventListener('mouseup',    function()   { endDraw(canvasId); });
+  canvas.addEventListener('mouseleave', function()   { endDraw(canvasId); });
+  // Événements tactiles
+  canvas.addEventListener('touchstart', function(ev) { ev.preventDefault(); startDraw(canvasId, ev); }, {passive:false});
+  canvas.addEventListener('touchmove',  function(ev) { ev.preventDefault(); draw(canvasId, ev); },      {passive:false});
+  canvas.addEventListener('touchend',   function(ev) { ev.preventDefault(); endDraw(canvasId); },       {passive:false});
+}
+
+function getXY(canvas, e) {
+  var rect = canvas.getBoundingClientRect();
+  var src  = e.touches ? e.touches[0] : e;
+  return {x: src.clientX - rect.left, y: src.clientY - rect.top};
+}
+
+function startDraw(canvasId, e) {
+  var s = sigStates[canvasId]; if (!s) return;
+  var p = getXY(document.getElementById(canvasId), e);
+  s.drawing = true; s.lastX = p.x; s.lastY = p.y;
+  s.ctx.beginPath(); s.ctx.moveTo(p.x, p.y);
+}
+
+function draw(canvasId, e) {
+  var s = sigStates[canvasId]; if (!s || !s.drawing) return;
+  var p = getXY(document.getElementById(canvasId), e);
+  s.ctx.lineTo(p.x, p.y);
+  s.ctx.strokeStyle = '#1B3557'; s.ctx.lineWidth = 2.2;
+  s.ctx.lineCap = 'round'; s.ctx.lineJoin = 'round';
+  s.ctx.stroke();
+  s.ctx.beginPath(); s.ctx.moveTo(p.x, p.y);
+  if (s.empty) { s.empty = false; document.getElementById(canvasId.replace('sig-','hint-')).style.display = 'none'; }
+}
+
+function endDraw(canvasId) { var s = sigStates[canvasId]; if (s) s.drawing = false; }
+
+function clearSig(canvasId, hintId) {
+  var s = sigStates[canvasId]; if (!s) return;
+  s.ctx.clearRect(0, 0, s.w, s.h); s.empty = true;
+  document.getElementById(hintId).style.display = 'flex';
+}
+
+function getSigDataURL(canvasId) {
+  var s = sigStates[canvasId];
+  if (!s || s.empty) return null;
+  return document.getElementById(canvasId).toDataURL('image/png');
+}
+
+function restoreSig(canvasId, hintId, dataURL) {
+  var s = sigStates[canvasId]; if (!s) return;
+  var img = new Image();
+  img.onload = function() {
+    s.ctx.drawImage(img, 0, 0, s.w, s.h);
+    s.empty = false;
+    document.getElementById(hintId).style.display = 'none';
+  };
+  img.src = dataURL;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════════════ */
+var $ = function(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; };
+var e = function(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
+
+function fmtDateLong(val) {
+  if (!val) return '—';
+  return new Date(val + 'T12:00:00').toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'});
+}
+
+function getCompRowsWord(comps) {
+  return comps.map(function(c) {
+    var present = (document.getElementById(c.id+'-present')||{}).value || '—';
+    var statut  = (document.getElementById(c.id+'-statut') ||{}).value || '—';
+    var comment = ((document.getElementById(c.id+'-comment')||{}).value||'').trim();
+    var type    = c.hasType ? ((document.getElementById(c.id+'-type')||{}).value||'').trim() : null;
+    var nameCell = type ? e(c.name) + '<br><small style="color:#64748B;font-weight:normal">Type : ' + e(type) + '</small>' : e(c.name);
+    var statCol  = statut==='OK' ? '#16A34A' : statut==='KO' ? '#DC2626' : '#64748B';
+    var presCol  = present==='OUI' ? '#16A34A' : present==='NON' ? '#DC2626' : '#64748B';
+    return '<tr>' +
+      '<td style="padding:4pt 8pt;border:1pt solid #BBCCE0;font-weight:600">'+ nameCell +'</td>' +
+      '<td style="padding:4pt 8pt;border:1pt solid #BBCCE0;text-align:center;font-weight:700;color:'+ presCol +'">'+ e(present) +'</td>' +
+      '<td style="padding:4pt 8pt;border:1pt solid #BBCCE0;text-align:center;font-weight:700;color:'+ statCol +'">'+ e(statut) +'</td>' +
+      '<td style="padding:4pt 8pt;border:1pt solid #BBCCE0">'+ e(comment) +'</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function getFilename() {
+  var client = $('f-client').replace(/[^\w\s\-]/g,'').replace(/\s+/g,'-').slice(0,30);
+  var dt = new Date().toISOString().slice(0,10).replace(/-/g,'');
+  return 'PV-Reception-Installateur' + (client ? '-'+client : '') + '-' + dt + '.doc';
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   GÉNÉRATION WORD
+══════════════════════════════════════════════════════════ */
+function buildWordDoc() {
+  var client    = $('f-client');
+  var adresse   = $('f-adresse');
+  var hemoRep   = $('f-hemo-rep');
+  var instEnt   = $('f-inst-ent');
+  var instRep   = $('f-inst-rep');
+  var dDebut    = fmtDateLong($('f-date-debut'));
+  var dFin      = fmtDateLong($('f-date-fin'));
+  var schema    = getRadio('rg-schema');
+  var reseau    = getRadio('rg-reseau');
+  var implant   = getRadio('rg-implant');
+  var autrePlan = $('f-autre-plan');
+  var alimElec  = getRadio('rg-elec');
+  var alimEau   = getRadio('rg-eau');
+  var remGen    = $('f-rem-gen');
+  var remComp   = $('f-rem-comp');
+  var manquants = $('f-manquants');
+  var distrib   = getRadio('rg-distrib');
+  var remDist   = $('f-rem-distrib');
+  var manqDist  = $('f-manquants-distrib');
+  var suggest   = $('f-suggestions');
+  var dRecep    = fmtDateLong($('f-date-recep'));
+  var decInput  = document.querySelector('#s2 input[name=decision]:checked');
+  var decision  = decInput ? decInput.value : '';
+  var reserves  = $('f-reserves');
+  var lieuSig   = $('f-lieu-sig');
+  var dSig      = fmtDateLong($('f-date-sig'));
+  var sigI      = getSigDataURL('sig-inst');
+  var sigH      = getSigDataURL('sig-hemo');
+  var leveeNom  = $('f-levee-nom');
+  var leveeEffet= fmtDateLong($('f-levee-effet'));
+  var leveeLieu = $('f-levee-lieu');
+  var leveeDate = fmtDateLong($('f-levee-date'));
+
+  var secH = function(t) { return '<tr><td colspan="4" style="background:#1B3557;color:#fff;font-weight:bold;font-size:12pt;padding:6pt 8pt;border:1pt solid #8899BB">' + e(t) + '</td></tr>'; };
+  var subH = function(t,bg,col) { bg=bg||'#EDE9FE'; col=col||'#5B21B6'; return '<tr><td colspan="4" style="background:'+bg+';color:'+col+';font-weight:bold;font-size:10pt;padding:4pt 8pt;border:1pt solid #BBCCE0">'+e(t)+'</td></tr>'; };
+  var dr   = function(l,v) { return '<tr><td style="background:#F4F7FB;font-weight:bold;width:30%;padding:4pt 8pt;border:1pt solid #BBCCE0">'+e(l)+'</td><td colspan="3" style="padding:4pt 8pt;border:1pt solid #BBCCE0">'+e(v||'—')+'</td></tr>'; };
+  var mr   = function(l,v) { var lines=(v||'').split('\n').filter(Boolean); var html=lines.length?lines.map(function(x){return'<p style="margin:0 0 2pt">'+e(x)+'</p>';}).join(''):'—'; return '<tr><td style="background:#F4F7FB;font-weight:bold;width:30%;padding:4pt 8pt;border:1pt solid #BBCCE0;vertical-align:top">'+e(l)+'</td><td colspan="3" style="padding:4pt 8pt;border:1pt solid #BBCCE0">'+html+'</td></tr>'; };
+  var sigCell = function(b64, label) { return b64
+    ? '<td style="padding:8pt;border:1pt solid #BBCCE0;text-align:center;width:50%"><div style="font-weight:bold;margin-bottom:4pt;font-size:9pt;color:#64748B;text-transform:uppercase">'+e(label)+'</div><img src="'+b64+'" style="max-width:190pt;max-height:80pt;border:1pt solid #DDE5F0"></td>'
+    : '<td style="padding:8pt;border:1pt solid #BBCCE0;text-align:center;width:50%"><div style="font-weight:bold;margin-bottom:4pt;font-size:9pt;color:#64748B;text-transform:uppercase">'+e(label)+'</div><div style="height:60pt;border:1pt dashed #CBD5E1;border-radius:4pt"></div></td>'; };
+
+  var decisionTxt = decision === 'sans'
+    ? '&#9745; Sans réserve &nbsp;&nbsp;&nbsp; &#9744; Avec les réserves suivantes'
+    : decision === 'avec'
+    ? '&#9744; Sans réserve &nbsp;&nbsp;&nbsp; &#9745; Avec les réserves suivantes'
+    : '&#9744; Sans réserve &nbsp;&nbsp;&nbsp; &#9744; Avec les réserves suivantes';
+
+  var distribRows = distrib === 'OUI'
+    ? secH('DISTRIBUTION CENTRALISÉE DE CONCENTRÉ — Présente : OUI') +
+      '<tr><td style="background:#F4F7FB;font-weight:bold;padding:4pt 8pt;border:1pt solid #BBCCE0">Composant</td><td style="background:#F4F7FB;font-weight:bold;padding:4pt 8pt;border:1pt solid #BBCCE0">Présent</td><td style="background:#F4F7FB;font-weight:bold;padding:4pt 8pt;border:1pt solid #BBCCE0">Statut</td><td style="background:#F4F7FB;font-weight:bold;padding:4pt 8pt;border:1pt solid #BBCCE0">Commentaires</td></tr>' +
+      getCompRowsWord(DISTRIB_COMPS) + mr('Remarques', remDist) + mr('Éléments manquants ou en défaut', manqDist)
+    : distrib === 'NON'
+    ? secH('DISTRIBUTION CENTRALISÉE DE CONCENTRÉ — Présente : NON')
+    : '';
+
+  var leveeRows = decision === 'avec'
+    ? secH('PROCÈS-VERBAL DE LEVÉE DES RÉSERVES') +
+      '<tr><td colspan="4" style="padding:8pt;border:1pt solid #BBCCE0;line-height:1.8">Je soussigné(e) : <strong>'+e(leveeNom||'………………………………')+'</strong><br>Agissant en qualité de représentant d\'HEMOTECH, donne acte à l\'installateur de la levée des réserves, à effet du : <strong>'+leveeEffet+'</strong>.<br>Fait à <strong>'+e(leveeLieu||'……………………')+'</strong> le <strong>'+leveeDate+'</strong>.</td></tr>'
+    : '';
+
+  return '<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>PV Réception'+(client?' — '+client:'')+'</title>' +
+    '<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->' +
+    '<style>@page Section1{size:21.0cm 29.7cm;margin:2.0cm 2.0cm 2.0cm 2.0cm}div.Section1{page:Section1}body{font-family:Arial,sans-serif;font-size:10pt;color:#1E293B}table{border-collapse:collapse;width:100%;margin-bottom:8pt}h1{font-size:17pt;color:#1B3557;text-align:center;margin:0 0 2pt}.sub{text-align:center;color:#7C3AED;font-size:13pt;font-weight:bold;margin:0 0 2pt}.dat{text-align:center;color:#64748B;font-size:9pt;margin:0 0 12pt}</style>' +
+    '</head><body><div class="Section1">' +
+    '<h1>PROCÈS-VERBAL DE RÉCEPTION</h1>' +
+    '<p class="sub">Installateur / HEMOTECH</p>' +
+    (client ? '<p class="sub" style="font-size:11pt;color:#1B3557">'+e(client)+'</p>' : '') +
+    '<p class="dat">Document généré le '+new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'})+'</p>' +
+    '<table>' +
+    secH('IDENTIFICATION DU PROJET') + dr('Client',client) + mr('Adresse',adresse) +
+    secH('INTERLOCUTEURS') + subH('HEMOTECH') + dr('Représenté par',hemoRep) +
+    subH('INSTALLATEUR','#F3F4FE','#4C1D95') + dr('Entreprise',instEnt) + dr('Représenté par',instRep) +
+    secH('DATES DE CHANTIER') + dr('Date de début',dDebut) + dr('Date de fin',dFin) +
+    secH('SCHÉMAS ET PLANS') + dr('Schéma de principe',schema) + dr('Plan de réseau',reseau) + dr("Plan d'implantation",implant) + dr('Autre plan',autrePlan) +
+    secH('FOURNITURES CLIENT') + dr('Alimentation électrique définitive',alimElec) + dr('Alimentation en eau définitive',alimEau) +
+    secH('REMARQUES GÉNÉRALES') + mr('Remarques',remGen) +
+    secH('LISTE DES COMPOSANTS') +
+    '<tr><td colspan="4" style="background:#EDE9FE;padding:4pt 8pt;border:1pt solid #BBCCE0;font-size:9pt;color:#5B21B6"><em>Note : si l\'eau n\'est pas présente, les tests seront faits au gaz neutre. OK = Correct · KO = Non correct · NT = Non testé</em></td></tr>' +
+    '<tr><td style="background:#F4F7FB;font-weight:bold;padding:4pt 8pt;border:1pt solid #BBCCE0">Composant</td><td style="background:#F4F7FB;font-weight:bold;padding:4pt 8pt;border:1pt solid #BBCCE0">Présent</td><td style="background:#F4F7FB;font-weight:bold;padding:4pt 8pt;border:1pt solid #BBCCE0">Statut</td><td style="background:#F4F7FB;font-weight:bold;padding:4pt 8pt;border:1pt solid #BBCCE0">Commentaires</td></tr>' +
+    getCompRowsWord(COMPOSANTS) + mr('Remarques',remComp) + mr('Éléments manquants ou en défaut',manquants) +
+    distribRows +
+    secH('SUGGESTIONS') + mr('Suggestions',suggest) +
+    secH('PROCÈS-VERBAL DE RÉCEPTION') +
+    '<tr><td colspan="4" style="padding:8pt;border:1pt solid #BBCCE0;line-height:1.9">Au vu de la réception de fin des travaux, en date du <strong>'+dRecep+'</strong>, comprenant la réalisation de l\'installation conformément aux documents référencés ci-dessus, aux auto-contrôles menés par l\'installateur et la fourniture du dossier d\'ouvrage exécuté.<br><br>Le représentant d\'HEMOTECH décide que la réception est prononcée :<br><span style="font-size:12pt">'+decisionTxt+'</span>'+(decision==='avec'&&reserves?'<br><br><strong>Réserves :</strong><br>'+e(reserves).replace(/\n/g,'<br>'):'')+'</td></tr>' +
+    secH('SIGNATURES') +
+    '<tr><td colspan="4" style="padding:6pt 8pt;border:1pt solid #BBCCE0;font-style:italic;color:#64748B">A <strong>'+e(lieuSig||'………………………')+'</strong> le <strong>'+dSig+'</strong></td></tr>' +
+    '<tr>'+sigCell(sigI,"Signature de l'Installateur")+sigCell(sigH,'Signature HEMOTECH — '+e(hemoRep))+'</tr>' +
+    leveeRows +
+    '</table></div></body></html>';
+}
+
+function exportWord() {
+  var btn  = document.getElementById('btn-export');
+  var orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<svg style="width:16px;height:16px;animation:spin 1s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Génération…';
+  try {
+    var doc  = buildWordDoc();
+    var blob = new Blob(['﻿', doc], {type:'application/msword'});
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement('a');
+    a.href     = url;
+    a.download = getFilename();
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    hubSauver();
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polyline points="20 6 9 17 4 12"/></svg> Téléchargé !';
+    setTimeout(function() { btn.innerHTML = orig; btn.disabled = false; }, 3500);
+  } catch(err) {
+    console.error(err);
+    alert('Erreur lors de la génération :\n' + err.message);
+    btn.innerHTML = orig; btn.disabled = false;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   ENVOI PAR E-MAIL
+══════════════════════════════════════════════════════════ */
+function openMailModal()  { document.getElementById('mail-overlay').classList.add('show'); setTimeout(function(){document.getElementById('mail-to').focus();},80); }
+function closeMailModal() { document.getElementById('mail-overlay').classList.remove('show'); }
+
+function sendMail() {
+  var to     = document.getElementById('mail-to').value.trim();
+  var cc     = document.getElementById('mail-cc').value.trim();
+  var client = $('f-client') || 'Client';
+  var rep    = $('f-hemo-rep') || 'Thomas WERBROUCK';
+  var dRecep = $('f-date-recep') ? fmtDateLong($('f-date-recep')) : new Date().toLocaleDateString('fr-FR');
+  exportWord();
+  var subject = encodeURIComponent('PV Réception Installateur — ' + client);
+  var body = encodeURIComponent(
+    'Bonjour,\n\nVeuillez trouver ci-joint le Procès-Verbal de Réception Installateur pour :\n\n' +
+    'Client : ' + client + '\n' +
+    'Date de réception : ' + dRecep + '\n' +
+    'Représentant HEMOTECH : ' + rep + '\n' +
+    'Installateur : ' + ($('f-inst-ent') || '—') + '\n\n' +
+    'Merci de bien vouloir vérifier le document joint et nous faire part de tout commentaire.\n\n' +
+    'Cordialement,\n' + rep + '\nHEMOTECH — Service TTE'
+  );
+  var mailto = 'mailto:' + to + '?subject=' + subject + '&body=' + body;
+  if (cc) mailto += '&cc=' + encodeURIComponent(cc);
+  setTimeout(function() { window.location.href = mailto; }, 900);
+  closeMailModal();
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function() {
+  rendreListe();
+  window.addEventListener('resize', function() {
+    if (!document.getElementById('s2').classList.contains('screen-hide')) {
+      requestAnimationFrame(function() { initSig('sig-inst','hint-inst'); initSig('sig-hemo','hint-hemo'); });
+    }
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hemotech — Plannings par opération</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1D3B6B;--coral:#E05555;--light:#f0f5fc;
+  --border:#dce6f0;--text:#1e293b;--muted:#64748b;
+  --indigo:#4F46E5;--indigo-d:#4338CA;--indigo-light:#EEF2FF;
+  --green:#16A34A;--red:#DC2626;
+}
+html,body{height:100%}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--light);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+
+header{background:var(--navy);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(0,0,0,.25);flex-shrink:0}
+.logo-wrap img{height:38px;display:block}
+.header-right .title{font-size:14px;font-weight:600;color:white;letter-spacing:.02em}
+.header-right .sub{font-size:10px;color:rgba(255,255,255,.55);margin-top:1px}
+.header-line{height:3px;background:var(--coral);flex-shrink:0}
+
+.back-bar{padding:16px 40px 0;flex-shrink:0}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--navy);text-decoration:none;font-size:13px;font-weight:500;padding:6px 12px;border-radius:6px;background:white;border:1px solid var(--border);transition:all .15s}
+.back-link:hover{background:#f0f5fc;transform:translateX(-2px)}
+
+main{flex:1;padding:28px 40px 48px;max-width:860px;width:100%;margin:0 auto}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:12px}
+h1{font-size:22px;font-weight:700;color:var(--navy)}
+.subtitle{font-size:12.5px;color:var(--muted);margin-bottom:24px}
+
+.btn-new{display:inline-flex;align-items:center;gap:7px;background:var(--indigo);color:white;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn-new:hover{background:var(--indigo-d)}
+
+/* ── LISTE ── */
+.list-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.list-header{display:grid;grid-template-columns:1fr 145px 145px 220px;gap:12px;padding:10px 18px;background:#f8fafc;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.list-row{display:grid;grid-template-columns:1fr 145px 145px 220px;gap:12px;padding:13px 18px;border-bottom:0.5px solid var(--border);align-items:center;transition:background .12s}
+.list-row:last-child{border-bottom:none}
+.list-row:hover{background:#fafbff}
+
+.op-name{font-size:14px;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:8px}
+.op-dot{width:8px;height:8px;border-radius:50%;background:var(--indigo);flex-shrink:0}
+.op-date{font-size:11.5px;color:var(--muted)}
+
+.row-actions{display:flex;gap:6px;justify-content:flex-end}
+.btn-sm{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;border:none;cursor:pointer;font-family:inherit;transition:all .15s;text-decoration:none;white-space:nowrap}
+.btn-open{background:var(--indigo);color:white}
+.btn-open:hover{background:var(--indigo-d)}
+.btn-rename{background:white;color:var(--navy);border:1px solid var(--border)}
+.btn-rename:hover{background:#f0f5fc}
+.btn-delete{background:white;color:var(--red);border:1px solid #fecaca}
+.btn-delete:hover{background:#fef2f2}
+
+/* ── ÉTAT VIDE ── */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 20px;gap:14px;color:var(--muted)}
+.empty-icon{width:56px;height:56px;border-radius:14px;background:var(--indigo-light);display:flex;align-items:center;justify-content:center}
+.empty-icon svg{width:28px;height:28px;color:var(--indigo)}
+.empty h3{font-size:16px;font-weight:600;color:var(--navy)}
+.empty p{font-size:13px;text-align:center;max-width:340px;line-height:1.6}
+
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.overlay.show{display:flex}
+.modal{background:white;border-radius:14px;padding:28px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal h2{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.modal p{font-size:12.5px;color:var(--muted);margin-bottom:18px}
+.modal input{width:100%;font-family:inherit;font-size:14px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;color:var(--text);background:#fafcff;transition:border-color .15s}
+.modal input:focus{outline:none;border-color:var(--indigo)}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.btn-cancel{font-family:inherit;font-size:13px;font-weight:500;padding:9px 16px;border:1px solid var(--border);border-radius:8px;background:white;color:var(--muted);cursor:pointer;transition:all .15s}
+.btn-cancel:hover{background:#f8fafc}
+.btn-confirm{font-family:inherit;font-size:13px;font-weight:600;padding:9px 18px;border:none;border-radius:8px;background:var(--indigo);color:white;cursor:pointer;transition:background .15s}
+.btn-confirm:hover{background:var(--indigo-d)}
+.btn-confirm:disabled{opacity:.45;cursor:not-allowed}
+
+footer{background:var(--navy);padding:18px 40px;flex-shrink:0;margin-top:auto}
+.footer-text{font-size:11px;color:rgba(255,255,255,.4);max-width:860px;margin:0 auto}
+.footer-text span{color:var(--coral);font-weight:600}
+
+@media(max-width:700px){
+  header{padding:0 16px}
+  .back-bar,main{padding-left:16px;padding-right:16px}
+  .list-header,.list-row{grid-template-columns:1fr auto}
+  .col-created,.col-modif{display:none}
+  footer{padding:14px 16px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <img src="../Hemotech-logo-website-300x72.png.webp" alt="Hemotech">
+  </div>
+  <div class="header-right">
+    <div class="title">Plannings par opération</div>
+    <div class="sub">Traitement de l'eau · Service technique</div>
+  </div>
+</header>
+<div class="header-line"></div>
+
+<div class="back-bar">
+  <a href="Planning-Hub.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Retour au choix planning
+  </a>
+</div>
+
+<main>
+  <div class="top-bar">
+    <div>
+      <h1>Plannings par opération</h1>
+    </div>
+    <button class="btn-new" onclick="ouvrirModalCreer()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Nouveau planning
+    </button>
+  </div>
+  <p class="subtitle">Chaque planning correspond à une opération spécifique. Nommez-les librement.</p>
+
+  <div class="list-card" id="listCard">
+    <div class="list-header">
+      <div>Nom de l'opération</div>
+      <div class="col-created">Créé le</div>
+      <div class="col-modif">Modifié le</div>
+      <div></div>
+    </div>
+    <div id="listBody"></div>
+  </div>
+</main>
+
+<!-- MODAL CRÉER / RENOMMER -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2 id="modalTitle">Nouveau planning</h2>
+    <p id="modalDesc">Donnez un nom à cette opération (ex : AURA SANTÉ - Osmoseur 2026).</p>
+    <input type="text" id="modalInput" placeholder="Nom de l'opération..." maxlength="80" autocomplete="off">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fermerModal()">Annuler</button>
+      <button class="btn-confirm" id="modalConfirm" onclick="confirmerModal()">Créer</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 &nbsp;<span>Hemotech</span> &nbsp;· Usage interne uniquement</div>
+</footer>
+
+<script>
+var STORAGE_INDEX = 'plannings_op_index';
+var modalMode = 'create'; // 'create' | 'rename'
+var renameId = null;
+
+function chargerIndex() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_INDEX)) || []; }
+  catch(e) { return []; }
+}
+function sauverIndex(data) {
+  localStorage.setItem(STORAGE_INDEX, JSON.stringify(data));
+}
+function fmtDate(iso) {
+  if (!iso) return '—';
+  var d = new Date(iso);
+  return {
+    date: d.toLocaleDateString('fr-FR', {day:'2-digit', month:'2-digit', year:'numeric'}),
+    heure: d.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'})
+  };
+}
+
+function rendreListe() {
+  var ops = chargerIndex();
+  var body = document.getElementById('listBody');
+  if (!ops.length) {
+    body.innerHTML = `<div class="empty">
+      <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg></div>
+      <h3>Aucun planning créé</h3>
+      <p>Cliquez sur <strong>Nouveau planning</strong> pour créer votre premier planning d'opération.</p>
+    </div>`;
+    return;
+  }
+  body.innerHTML = ops.map(function(op) {
+    return `<div class="list-row">
+      <div class="op-name"><div class="op-dot"></div>${escH(op.nom)}</div>
+      <div class="op-date col-created">${(function(){var f=fmtDate(op.dateCreation);return f==='—'?'—':'<div>'+f.date+'</div><div style="font-size:10px;color:#94a3b8">'+f.heure+'</div>';})()}</div>
+      <div class="op-date col-modif">${(function(){var f=fmtDate(op.dateModif);return f==='—'?'—':'<div>'+f.date+'</div><div style="font-size:10px;color:#94a3b8">'+f.heure+'</div>';})()}</div>
+      <div class="row-actions">
+        <a href="Planning-Op.html?id=${encodeURIComponent(op.id)}" class="btn-sm btn-open">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Ouvrir
+        </a>
+        <button class="btn-sm btn-rename" onclick="ouvrirModalRenommer('${op.id}', '${escH(op.nom).replace(/'/g,"\\'")}')">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Renommer
+        </button>
+        <button class="btn-sm btn-delete" onclick="supprimerOp('${op.id}', '${escH(op.nom).replace(/'/g,"\\'")}')">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+          Suppr.
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function escH(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── MODAL ── */
+function ouvrirModalCreer() {
+  modalMode = 'create';
+  renameId = null;
+  document.getElementById('modalTitle').textContent = 'Nouveau planning d\'opération';
+  document.getElementById('modalDesc').textContent = 'Donnez un nom à cette opération (ex : AURA SANTÉ - Osmoseur 2026).';
+  document.getElementById('modalConfirm').textContent = 'Créer';
+  document.getElementById('modalInput').value = '';
+  document.getElementById('overlay').classList.add('show');
+  setTimeout(function(){ document.getElementById('modalInput').focus(); }, 50);
+}
+
+function ouvrirModalRenommer(id, nom) {
+  modalMode = 'rename';
+  renameId = id;
+  document.getElementById('modalTitle').textContent = 'Renommer l\'opération';
+  document.getElementById('modalDesc').textContent = 'Modifiez le nom de ce planning d\'opération.';
+  document.getElementById('modalConfirm').textContent = 'Renommer';
+  document.getElementById('modalInput').value = nom;
+  document.getElementById('overlay').classList.add('show');
+  setTimeout(function(){
+    var inp = document.getElementById('modalInput');
+    inp.focus(); inp.select();
+  }, 50);
+}
+
+function fermerModal() {
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('modalInput').value = '';
+}
+
+function confirmerModal() {
+  var nom = document.getElementById('modalInput').value.trim();
+  if (!nom) { document.getElementById('modalInput').focus(); return; }
+
+  if (modalMode === 'create') {
+    var id = 'op_' + Date.now();
+    var ops = chargerIndex();
+    ops.unshift({ id: id, nom: nom, dateCreation: new Date().toISOString(), dateModif: new Date().toISOString() });
+    sauverIndex(ops);
+    fermerModal();
+    rendreListe();
+    // Ouvrir directement le nouveau planning
+    window.location.href = 'Planning-Op.html?id=' + encodeURIComponent(id);
+  } else {
+    var ops = chargerIndex();
+    ops = ops.map(function(op) {
+      if (op.id === renameId) return Object.assign({}, op, { nom: nom, dateModif: new Date().toISOString() });
+      return op;
+    });
+    sauverIndex(ops);
+    fermerModal();
+    rendreListe();
+  }
+}
+
+function supprimerOp(id, nom) {
+  if (!confirm('Supprimer le planning "' + nom + '" ?\n\nToutes les données de ce planning seront effacées définitivement.')) return;
+  var ops = chargerIndex().filter(function(op){ return op.id !== id; });
+  sauverIndex(ops);
+  try { localStorage.removeItem('planning_op_' + id); } catch(e) {}
+  rendreListe();
+}
+
+/* Fermer le modal en cliquant sur l'overlay */
+document.getElementById('overlay').addEventListener('click', function(e) {
+  if (e.target === this) fermerModal();
+});
+
+/* Valider avec Entrée */
+document.getElementById('modalInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') confirmerModal();
+  if (e.key === 'Escape') fermerModal();
+});
+
+rendreListe();
+</script>
+
+</body>
+</html>

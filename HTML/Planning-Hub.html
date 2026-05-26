@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hemotech — Planning d'installation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1D3B6B;--coral:#E05555;--light:#f0f5fc;
+  --border:#dce6f0;--text:#1e293b;--muted:#64748b;
+  --blue:#3B6BA5;--blue-d:#2D5285;--indigo:#4F46E5;--indigo-d:#4338CA;
+}
+html,body{height:100%}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--light);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+
+header{background:var(--navy);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(0,0,0,.25);flex-shrink:0}
+.logo-wrap img{height:38px;display:block}
+.header-right{display:flex;flex-direction:column;align-items:flex-end}
+.header-right .title{font-size:14px;font-weight:600;color:white;letter-spacing:.02em}
+.header-right .sub{font-size:10px;color:rgba(255,255,255,.55);margin-top:1px}
+.header-line{height:3px;background:var(--coral);flex-shrink:0}
+
+.back-bar{padding:16px 40px 0;flex-shrink:0}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--navy);text-decoration:none;font-size:13px;font-weight:500;padding:6px 12px;border-radius:6px;background:white;border:1px solid var(--border);transition:all .15s}
+.back-link:hover{background:#f0f5fc;transform:translateX(-2px)}
+
+main{flex:1;padding:32px 40px 48px;max-width:860px;width:100%;margin:0 auto}
+h1{font-size:23px;font-weight:700;color:var(--navy);margin-bottom:5px}
+.subtitle{font-size:13px;color:var(--muted);margin-bottom:32px}
+
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+
+.action-card{
+  display:flex;flex-direction:column;gap:16px;
+  background:white;border:1.5px solid var(--border);border-radius:14px;
+  padding:30px 26px;text-decoration:none;color:inherit;
+  transition:box-shadow .2s,transform .2s,border-color .2s;
+  position:relative;overflow:hidden;
+}
+.action-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:5px;
+  border-radius:14px 0 0 14px;
+}
+.action-card:hover{box-shadow:0 8px 32px rgba(29,59,107,.14);transform:translateY(-3px)}
+.card-tte::before{background:var(--blue)}
+.card-tte:hover{border-color:#93c5fd}
+.card-op::before{background:var(--indigo)}
+.card-op:hover{border-color:#c7d2fe}
+
+.action-icon{width:54px;height:54px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.icon-blue{background:#E8F0FC}
+.icon-indigo{background:#EEF2FF}
+.action-icon svg{width:28px;height:28px}
+
+.action-title{font-size:18px;font-weight:700;color:var(--navy)}
+.action-desc{font-size:12.5px;color:var(--muted);line-height:1.65;flex:1}
+
+.action-cta{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:13px;font-weight:600;padding:10px 18px;border-radius:8px;
+  color:white;align-self:flex-start;transition:background .15s;
+}
+.cta-blue{background:var(--blue)}
+.card-tte:hover .cta-blue{background:var(--blue-d)}
+.cta-indigo{background:var(--indigo)}
+.card-op:hover .cta-indigo{background:var(--indigo-d)}
+
+footer{background:var(--navy);padding:18px 40px;flex-shrink:0;margin-top:auto}
+.footer-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.footer-text{font-size:11px;color:rgba(255,255,255,.4)}
+.footer-text span{color:var(--coral);font-weight:600}
+
+@media(max-width:640px){
+  header{padding:0 16px}
+  .back-bar,.main-wrap{padding-left:16px;padding-right:16px}
+  main{padding:24px 16px 40px}
+  .action-grid{grid-template-columns:1fr}
+  footer{padding:14px 16px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <img src="../Hemotech-logo-website-300x72.png.webp" alt="Hemotech">
+  </div>
+  <div class="header-right">
+    <div class="title">Planning d'installation</div>
+    <div class="sub">Traitement de l'eau · Service technique</div>
+  </div>
+</header>
+<div class="header-line"></div>
+
+<div class="back-bar">
+  <a href="../index.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Retour au portail
+  </a>
+</div>
+
+<main>
+  <h1>Planning d'installation TTE</h1>
+  <p class="subtitle">Choisissez le type de planning à consulter ou gérer.</p>
+
+  <div class="action-grid">
+
+    <!-- Planning TTE -->
+    <a href="Planning.html" class="action-card card-tte">
+      <div class="action-icon icon-blue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#3B6BA5" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+          <line x1="7" y1="15" x2="14" y2="15" stroke-width="2.5"/>
+          <line x1="7" y1="18" x2="11" y2="18" stroke-width="2.5"/>
+        </svg>
+      </div>
+      <div class="action-title">Planning TTE</div>
+      <div class="action-desc">Vue globale de <strong>toutes les opérations TTE</strong> en cours sur l'année. Ce planning centralise l'ensemble des interventions, mises en service et qualifications eau.</div>
+      <div class="action-cta cta-blue">
+        Ouvrir le planning
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+    </a>
+
+    <!-- Planning par opération -->
+    <a href="Plannings-Op.html" class="action-card card-op">
+      <div class="action-icon icon-indigo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="8" y1="13" x2="16" y2="13"/>
+          <line x1="8" y1="17" x2="12" y2="17"/>
+        </svg>
+      </div>
+      <div class="action-title">Planning par opération</div>
+      <div class="action-desc">Créez et gérez des plannings <strong>individuels par chantier</strong>. Un planning dédié par opération, nommé et archivé, pour un suivi précis chantier par chantier.</div>
+      <div class="action-cta cta-indigo">
+        Gérer les plannings
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+    </a>
+
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-text">© 2026 &nbsp;<span>Hemotech</span> &nbsp;· Usage interne uniquement</div>
+  </div>
+</footer>
+
+</body>
+</html>

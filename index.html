@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portail Chargé d'affaires — Hemotech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #5B8DB8;   /* bleu acier — fond principal */
+      --bg-dark:   #4A7AA6;   /* nuance plus sombre */
+      --bg-card:   #FFFFFF;
+      --border:    rgba(255,255,255,.16);
+      --border-h:  rgba(255,255,255,.3);
+      --text:      #FFFFFF;
+      --muted:     rgba(255,255,255,.62);
+      --orange:    #E05328;
+      --orange-d:  #C44420;
+      --navy:      #1B3557;
+
+      /* Accents modules — profonds, lisibles sur cartes blanches */
+      --c-planning: #2563EB;
+      --c-visite:   #059669;
+      --c-pv:       #7C3AED;
+      --c-mes:      #0891B2;
+      --c-factu:    #B45309;
+      --c-transport:#C2410C;
+      --c-commande: #4338CA;
+      --c-analyse:  #0369A1;
+      --c-guide:    #475569;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ── FOND GRILLE TECHNIQUE ─────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.09) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body > * { position: relative; z-index: 1; }
+
+    /* ── HEADER ──────────────────────────────────── */
+    header {
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      padding: 0 52px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(27,53,87,.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-shrink: 0;
+      box-shadow: 0 2px 24px rgba(0,0,0,.18);
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, var(--orange) 30%, var(--orange) 70%, transparent 100%);
+      opacity: .7;
+    }
+
+    .logo-wrap img { height: 38px; display: block; }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .header-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(224,83,40,.09);
+      border: 1px solid rgba(224,83,40,.24);
+      border-radius: 20px;
+      padding: 5px 14px 5px 10px;
+    }
+    .header-pill-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 7px rgba(224,83,40,.6);
+      animation: pulse-dot 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity:1; box-shadow: 0 0 7px rgba(224,83,40,.6); }
+      50%      { opacity:.5; box-shadow: 0 0 3px rgba(224,83,40,.28); }
+    }
+    .header-pill span {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .1em;
+      color: var(--orange);
+    }
+    .header-sub {
+      font-size: 11px;
+      color: #5B7799;
+      font-weight: 500;
+    }
+
+    /* ── HERO ────────────────────────────────────── */
+    .hero {
+      position: relative;
+      padding: 56px 52px 48px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .hero-glow-1 {
+      position: absolute;
+      top: -100px; right: -60px;
+      width: 480px; height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.14) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-glow-2 {
+      position: absolute;
+      bottom: -60px; left: 80px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(224,83,40,.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 20px;
+      padding: 5px 14px;
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow span {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(255,255,255,.92);
+    }
+    .hero-line { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.8); }
+
+    .hero h1 {
+      font-size: 36px; font-weight: 900;
+      color: #FFFFFF;
+      line-height: 1.15;
+      margin-bottom: 14px;
+      letter-spacing: -.02em;
+      text-shadow: 0 2px 12px rgba(0,0,0,.12);
+    }
+    .hero h1 em { font-style: normal; color: #FFD0B8; }
+    .hero h1 .hi { color: #C8E2FF; }
+
+    .hero-desc {
+      font-size: 15px;
+      color: rgba(255,255,255,.68);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 36px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .stat-icon {
+      width: 36px; height: 36px;
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.32);
+    }
+    .stat-icon svg { width: 18px; height: 18px; }
+    .stat-text { line-height: 1.3; }
+    .stat-val { font-size: 18px; font-weight: 800; color: #FFFFFF; }
+    .stat-lbl { font-size: 11px; color: rgba(255,255,255,.62); font-weight: 500; }
+
+    /* ── GRILLE PRINCIPALE ─────────────────────── */
+    .grid-wrap {
+      flex: 1;
+      padding: 40px 52px 60px;
+    }
+    .grid-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* ── LABEL DE SECTION ─────────────────────── */
+    .sec {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      margin-top: 36px;
+    }
+    .sec:first-child { margin-top: 0; }
+    .sec-num {
+      font-size: 10px; font-weight: 700;
+      font-family: 'Courier New', monospace;
+      color: rgba(255,255,255,.45);
+      letter-spacing: .05em;
+    }
+    .sec-label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .14em;
+      color: rgba(255,255,255,.55);
+    }
+    .sec-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,.22) 0%, transparent 100%); }
+
+    /* ── GRILLES ──────────────────────────────── */
+    .grid-1  { display: grid; grid-template-columns: 1fr;           gap: 14px; margin-bottom: 14px; }
+    .grid-3  { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 14px; }
+    .grid-2  { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin-bottom: 14px; }
+
+    /* ── CARTE GÉNÉRIQUE ──────────────────────── */
+    .card {
+      background: #FFFFFF;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 16px;
+      padding: 22px 20px 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,.18), 0 1px 4px rgba(0,0,0,.1);
+      transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+      cursor: pointer;
+    }
+
+    /* Accent top glow line */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent, rgba(27,53,87,.15)), transparent);
+      opacity: 0;
+      transition: opacity .25s;
+      border-radius: 0 0 4px 4px;
+    }
+    .card:hover::before { opacity: 1; }
+
+    /* Corner ambient glow */
+    .card::after {
+      content: '';
+      position: absolute;
+      top: -20px; left: -20px;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent-glow, rgba(27,53,87,.04)) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,.4);
+      box-shadow: 0 14px 44px var(--accent-shadow, rgba(0,0,0,.22)),
+                  0 4px 12px rgba(0,0,0,.12);
+    }
+
+    /* ── ICÔNE ──────────────────────────────── */
+    .card-icon {
+      width: 54px; height: 54px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      background: var(--icon-bg, rgba(27,53,87,.05));
+      border: 1px solid var(--icon-border, rgba(27,53,87,.09));
+      transition: box-shadow .22s;
+    }
+    .card:hover .card-icon {
+      box-shadow: 0 0 18px var(--icon-glow, rgba(27,53,87,.1));
+    }
+    .card-icon svg {
+      width: 26px; height: 26px;
+      color: var(--accent, var(--navy));
+      transition: filter .22s;
+    }
+    .card:hover .card-icon svg {
+      filter: drop-shadow(0 0 5px var(--accent-glow, transparent));
+    }
+
+    /* ── TEXTE CARTE ────────────────────────── */
+    .card-text { flex: 1; min-width: 0; }
+    .card-cat {
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .12em;
+      color: var(--accent, #5B7799);
+      margin-bottom: 5px;
+      opacity: .9;
+    }
+    .card-title {
+      font-size: 15px; font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 5px;
+      line-height: 1.3;
+    }
+    .card-desc {
+      font-size: 12px;
+      color: #5B7799;
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ── FLÈCHE ─────────────────────────────── */
+    .card-arrow {
+      margin-left: 8px;
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      background: rgba(27,53,87,.06);
+      border: 1px solid rgba(27,53,87,.1);
+      transition: background .2s, border-color .2s, transform .2s;
+    }
+    .card-arrow svg { width: 16px; height: 16px; color: #5B7799; transition: color .2s; }
+    .card:hover .card-arrow {
+      background: var(--accent, rgba(27,53,87,.12));
+      border-color: transparent;
+      transform: translateX(2px);
+    }
+    .card:hover .card-arrow svg { color: #fff; }
+
+    /* ── CARTE GUIDE (style ressource) ─────── */
+    .card-guide-style {
+      border-style: dashed;
+      border-color: rgba(255,255,255,.3);
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 4px 20px rgba(0,0,0,.16);
+    }
+    .card-guide-style .card-guide-btn {
+      margin-left: 8px;
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(71,85,105,.08);
+      border: 1px solid rgba(71,85,105,.2);
+      border-radius: 8px;
+      padding: 7px 13px;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      color: var(--c-guide);
+      flex-shrink: 0;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .card-guide-style:hover .card-guide-btn {
+      background: rgba(71,85,105,.14);
+      border-color: rgba(71,85,105,.3);
+    }
+    .card-guide-style .card-guide-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    /* ── CARTE PLANNING (featured) ──────────── */
+    .card-planning-feat {
+      padding: 28px 28px;
+      background: #FFFFFF;
+      border-color: rgba(255,255,255,.35);
+      box-shadow: 0 6px 32px rgba(0,0,0,.22), 0 2px 6px rgba(0,0,0,.12);
+    }
+    .card-planning-feat .card-icon {
+      width: 64px; height: 64px; border-radius: 16px;
+    }
+    .card-planning-feat .card-icon svg { width: 32px; height: 32px; }
+    .card-planning-feat .card-title { font-size: 19px; font-weight: 800; }
+    .card-planning-feat .card-desc {
+      font-size: 13px;
+      -webkit-line-clamp: unset;
+      line-clamp: unset;
+      overflow: visible;
+      max-width: 500px;
+    }
+    .card-planning-feat .card-arrow {
+      width: 44px; height: 44px; border-radius: 12px;
+    }
+    .card-planning-feat:hover {
+      border-color: rgba(37,99,235,.4);
+      box-shadow: 0 18px 60px rgba(37,99,235,.28), 0 6px 16px rgba(0,0,0,.16);
+    }
+
+    /* ── ACCENTS PAR MODULE ─────────────────── */
+    /* Planning */
+    .m-planning {
+      --accent: var(--c-planning);
+      --accent-border: rgba(37,99,235,.35);
+      --accent-shadow: rgba(37,99,235,.25);
+      --accent-glow:   rgba(37,99,235,.18);
+      --icon-bg:     rgba(37,99,235,.09);
+      --icon-border: rgba(37,99,235,.17);
+      --icon-glow:   rgba(37,99,235,.18);
+    }
+    /* Visite */
+    .m-visite {
+      --accent: var(--c-visite);
+      --accent-border: rgba(5,150,105,.35);
+      --accent-shadow: rgba(5,150,105,.2);
+      --accent-glow:   rgba(5,150,105,.18);
+      --icon-bg:     rgba(5,150,105,.09);
+      --icon-border: rgba(5,150,105,.17);
+      --icon-glow:   rgba(5,150,105,.18);
+    }
+    /* PV Réception */
+    .m-pv {
+      --accent: var(--c-pv);
+      --accent-border: rgba(124,58,237,.35);
+      --accent-shadow: rgba(124,58,237,.2);
+      --accent-glow:   rgba(124,58,237,.18);
+      --icon-bg:     rgba(124,58,237,.09);
+      --icon-border: rgba(124,58,237,.17);
+      --icon-glow:   rgba(124,58,237,.18);
+    }
+    /* MES */
+    .m-mes {
+      --accent: var(--c-mes);
+      --accent-border: rgba(8,145,178,.35);
+      --accent-shadow: rgba(8,145,178,.2);
+      --accent-glow:   rgba(8,145,178,.18);
+      --icon-bg:     rgba(8,145,178,.09);
+      --icon-border: rgba(8,145,178,.17);
+      --icon-glow:   rgba(8,145,178,.18);
+    }
+    /* Facturation */
+    .m-factu {
+      --accent: var(--c-factu);
+      --accent-border: rgba(180,83,9,.35);
+      --accent-shadow: rgba(180,83,9,.2);
+      --accent-glow:   rgba(180,83,9,.18);
+      --icon-bg:     rgba(180,83,9,.09);
+      --icon-border: rgba(180,83,9,.17);
+      --icon-glow:   rgba(180,83,9,.18);
+    }
+    /* Transport */
+    .m-transport {
+      --accent: var(--c-transport);
+      --accent-border: rgba(194,65,12,.35);
+      --accent-shadow: rgba(194,65,12,.2);
+      --accent-glow:   rgba(194,65,12,.18);
+      --icon-bg:     rgba(194,65,12,.09);
+      --icon-border: rgba(194,65,12,.17);
+      --icon-glow:   rgba(194,65,12,.18);
+    }
+    /* Commande fournisseur */
+    .m-commande {
+      --accent: var(--c-commande);
+      --accent-border: rgba(67,56,202,.35);
+      --accent-shadow: rgba(67,56,202,.2);
+      --accent-glow:   rgba(67,56,202,.18);
+      --icon-bg:     rgba(67,56,202,.09);
+      --icon-border: rgba(67,56,202,.17);
+      --icon-glow:   rgba(67,56,202,.18);
+    }
+    /* Analyse */
+    .m-analyse {
+      --accent: var(--c-analyse);
+      --accent-border: rgba(3,105,161,.35);
+      --accent-shadow: rgba(3,105,161,.2);
+      --accent-glow:   rgba(3,105,161,.18);
+      --icon-bg:     rgba(3,105,161,.09);
+      --icon-border: rgba(3,105,161,.17);
+      --icon-glow:   rgba(3,105,161,.18);
+    }
+    /* Guide */
+    .m-guide {
+      --accent: var(--c-guide);
+      --accent-border: rgba(71,85,105,.28);
+      --accent-shadow: rgba(71,85,105,.16);
+      --accent-glow:   rgba(71,85,105,.13);
+      --icon-bg:     rgba(71,85,105,.07);
+      --icon-border: rgba(71,85,105,.14);
+      --icon-glow:   rgba(71,85,105,.12);
+    }
+
+    /* ── FOOTER ─────────────────────────────── */
+    footer {
+      background: rgba(55,90,125,.55);
+      border-top: 1px solid rgba(255,255,255,.13);
+      padding: 22px 52px;
+      flex-shrink: 0;
+      backdrop-filter: blur(10px);
+    }
+    .footer-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-left { display: flex; align-items: center; gap: 16px; }
+    .footer-left img { height: 26px; opacity: .65; filter: brightness(0) invert(1); }
+    .footer-sep { width: 1px; height: 18px; background: rgba(255,255,255,.2); }
+    .footer-text { font-size: 11px; color: rgba(255,255,255,.45); }
+    .footer-right { font-size: 11px; color: rgba(255,255,255,.4); }
+    .footer-right span { color: #FFC4A8; }
+
+    /* ── RESPONSIVE ─────────────────────────── */
+    @media(max-width:900px) {
+      header      { padding: 0 20px; height: 60px; }
+      .hero       { padding: 36px 20px 32px; }
+      .hero h1    { font-size: 26px; }
+      .grid-wrap  { padding: 28px 20px 48px; }
+      .grid-3     { grid-template-columns: 1fr 1fr; }
+      footer      { padding: 16px 20px; }
+      .header-sub { display: none; }
+    }
+    @media(max-width:620px) {
+      .hero h1    { font-size: 21px; }
+      .hero-stats { gap: 18px; }
+      .stat-val   { font-size: 15px; }
+      .grid-3, .grid-2 { grid-template-columns: 1fr; }
+      .card       { padding: 16px 14px; gap: 14px; }
+      .card-icon  { width: 46px; height: 46px; border-radius: 12px; }
+      .card-icon svg { width: 22px; height: 22px; }
+      .card-title { font-size: 14px; }
+      .card-arrow { width: 32px; height: 32px; }
+      .card-planning-feat .card-icon { width: 52px; height: 52px; }
+      .card-planning-feat .card-title { font-size: 16px; }
+    }
+    @media(max-width:400px) {
+      .hero h1 br { display: none; }
+      .card-guide-style .card-guide-btn span { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     HEADER
+════════════════════════════════════════════ -->
+<header>
+  <div class="logo-wrap">
+    <img src="Hemotech-logo-website-300x72.png.webp" alt="Hemotech — Pollet Medical Group">
+  </div>
+  <div class="header-right">
+    <div class="header-pill">
+      <div class="header-pill-dot"></div>
+      <span>Portail TTE</span>
+    </div>
+    <div class="header-sub">Traitement de l'eau · Service technique</div>
+  </div>
+</header>
+
+
+<!-- ═══════════════════════════════════════════
+     HERO
+════════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-inner">
+
+    <div class="hero-eyebrow">
+      <div class="hero-line"></div>
+      <span>Espace chargé d'affaires · v2026</span>
+    </div>
+
+    <h1>Portail du Chargé d'affaires<br><em>HEMOTECH</em> <span class="hi">/ TTE</span></h1>
+
+    <p class="hero-desc">
+      Accédez à l'ensemble de vos outils de gestion — planification, interventions terrain, logistique, facturation et analyses.
+    </p>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="stat-text">
+          <div class="stat-val">9</div>
+          <div class="stat-lbl">Modules actifs</div>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="stat-text">
+          <div class="stat-val">HEMOTECH</div>
+          <div class="stat-lbl">Pollet Medical Group</div>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="stat-text">
+          <div class="stat-val">2026</div>
+          <div class="stat-lbl">Usage interne</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     GRILLE DES MODULES
+════════════════════════════════════════════ -->
+<div class="grid-wrap">
+  <div class="grid-inner">
+
+
+    <!-- ─── SECTION 01 · PILOTAGE ─────────────── -->
+    <div class="sec">
+      <span class="sec-num">// 01</span>
+      <span class="sec-label">Pilotage de projet</span>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="grid-1">
+      <!-- PLANNING — carte featured pleine largeur -->
+      <a href="HTML/Planning-Hub.html" class="card card-planning-feat m-planning">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+            <line x1="7" y1="15" x2="13" y2="15" stroke-width="2.2"/>
+            <line x1="7" y1="18" x2="10" y2="18" stroke-width="2.2"/>
+          </svg>
+        </div>
+        <div class="card-text">
+          <div class="card-cat">Planning interactif</div>
+          <div class="card-title">Planning d'installation</div>
+          <div class="card-desc">Visualisez et gérez le Gantt des interventions TTE — installations, mises en service et qualifications eau. Vue équipe complète.</div>
+        </div>
+        <div class="card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+    </div>
+
+
+    <!-- ─── SECTION 02 · TERRAIN ──────────────── -->
+    <div class="sec">
+      <span class="sec-num">// 02</span>
+      <span class="sec-label">Interventions terrain</span>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="grid-3">
+
+      <!-- Visite de site -->
+      <a href="HTML/Visite-Chantier.html" class="card m-visite">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div class="card-text">
+          <div class="card-cat">Relevé terrain</div>
+          <div class="card-title">Visite de site</div>
+          <div class="card-desc">Relevés terrain, photos, dictée vocale. Génère un rapport Word complet.</div>
+        </div>
+        <div class="card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+
+      <!-- Mise en service -->
+      <a href="HTML/Mise-en-service.html" class="card m-mes">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </div>
+        <div class="card-text">
+          <div class="card-cat">Installation</div>
+          <div class="card-title">Mise en service</div>
+          <div class="card-desc">Fiche d'installation TTE complète — osmoseurs, consommables calculés automatiquement.</div>
+        </div>
+        <div class="card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+
+      <!-- PV Réception -->
+      <a href="HTML/PV-Reception.html" class="card m-pv">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4"/>
+            <path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h9"/>
+          </svg>
+        </div>
+        <div class="card-text">
+          <div class="card-cat">Réception · Signature</div>
+          <div class="card-title">PV Réception Installateur</div>
+          <div class="card-desc">Procès-verbal avec signature tactile sur téléphone. Envoi par e-mail intégré.</div>
+        </div>
+        <div class="card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+
+    </div>
+
+
+    <!-- ─── SECTION 03 · LOGISTIQUE ───────────── -->
+    <div class="sec">
+      <span class="sec-num">// 03</span>
+      <span class="sec-label">Logistique &amp; facturation</span>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="grid-3">
+
+      <!-- Ordre de facturation -->
+      <a href="HTML/Ordre-Facturation.html" class="card m-factu">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <path d="M14 13a3 3 0 1 0 0 4"/>
+            <line x1="9" y1="14" x2="13" y2="14"/>
+            <line x1="9" y1="16" x2="13" y2="16"/>
+          </svg>
+        </div>
+        <div class="card-text">
+          <div class="card-cat">Comptabilité</div>
+          <div class="card-title">Ordre de facturation</div>
+          <div class="card-desc">Formulaire de facturation client — génère le fichier Excel comptable.</div>
+        </div>
+        <div class="card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+
+      <!-- Demande transport -->
+      <a href="HTML/Demande-Transport.html" class="card m-transport">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13" rx="1"/>
+            <path d="M16 8h4l3 5v4h-7V8z"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+        </div>
+        <div class="card-text">
+          <div class="card-cat">Logistique</div>
+          <div class="card-title">Demande de transport</div>
+          <div class="card-desc">Planifiez l'acheminement du matériel et des équipes terrain.</div>
+        </div>
+        <div class="card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+
+      <!-- Commande fournisseur -->
+      <a href="HTML/Commande-Fournisseur.html" class="card m-commande">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+        </div>
+        <div class="card-text">
+          <div class="card-cat">Approvisionnement</div>
+          <div class="card-title">Commande fournisseur</div>
+          <div class="card-desc">Générez la commande Excel pour saisie dans Divalto.</div>
+        </div>
+        <div class="card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+
+    </div>
+
+
+    <!-- ─── SECTION 04 · ANALYSES & RESSOURCES ── -->
+    <div class="sec">
+      <span class="sec-num">// 04</span>
+      <span class="sec-label">Analyses &amp; ressources</span>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="grid-2">
+
+      <!-- Demande analyse HD/HDF -->
+      <a href="HTML/Demande-Analyse.html" class="card m-analyse">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 3h6v8l3.5 6.5A2 2 0 0 1 16.8 20H7.2a2 2 0 0 1-1.7-2.5L9 11V3z"/>
+            <line x1="9" y1="3" x2="15" y2="3"/>
+            <path d="M6.5 15.5h11"/>
+            <circle cx="10" cy="16.5" r=".6" fill="currentColor"/>
+            <circle cx="13.5" cy="17.5" r=".6" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="card-text">
+          <div class="card-cat">Microbiologie · Physico-chimie</div>
+          <div class="card-title">Demande d'analyse HD/HDF</div>
+          <div class="card-desc">Bon de commande d'analyses microbiologiques et physico-chimiques pour hémodialyse et hémofiltration.</div>
+        </div>
+        <div class="card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+
+      <!-- Guide Divalto -->
+      <a href="HTML/Guide-Commande-Fournisseur.html" class="card card-guide-style m-guide">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+        </div>
+        <div class="card-text">
+          <div class="card-cat">Documentation</div>
+          <div class="card-title">Guide de saisie Divalto</div>
+          <div class="card-desc">Guide pas à pas pour la saisie d'une commande fournisseur dans Divalto.</div>
+        </div>
+        <div class="card-guide-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span>Consulter</span>
+        </div>
+      </a>
+
+    </div>
+
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <img src="Hemotech-logo-website-300x72.png.webp" alt="Hemotech">
+      <div class="footer-sep"></div>
+      <div class="footer-text">Service Traitement de l'Eau &nbsp;·&nbsp; Pollet Medical Group</div>
+    </div>
+    <div class="footer-right">
+      © 2026 &nbsp;<span>Hemotech</span> &nbsp;·&nbsp; Usage interne uniquement
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

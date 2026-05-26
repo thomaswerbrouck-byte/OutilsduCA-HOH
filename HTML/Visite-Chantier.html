@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visite de site — Hemotech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    :root{
+      --orange:#E05328;
+      --orange-d:#C44820;
+      --blue:#3B6BA5;
+      --blue-d:#2D5285;
+      --navy:#1B3557;
+      --light:#F4F7FB;
+      --card:#ffffff;
+      --border:#DDE5F0;
+      --text:#1E293B;
+      --muted:#64748B;
+      --green:#16A34A;
+      --green-d:#15803D;
+    }
+
+    html,body{
+      font-family:'Open Sans',Arial,sans-serif;
+      background:var(--light);
+      color:var(--text);
+    }
+
+    /* ── SCREENS ─────────────────────────────────────── */
+    .screen{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      transition:opacity .3s ease, transform .3s ease;
+    }
+    .screen-hide{display:none!important}
+
+    /* ── HEADER ──────────────────────────────────────── */
+    .site-header{
+      background:#fff;
+      padding:0 48px;
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      box-shadow:0 1px 0 var(--border);
+      flex-shrink:0;
+      position:relative;
+    }
+    .site-header::after{
+      content:'';
+      position:absolute;
+      bottom:0;left:0;right:0;
+      height:3px;
+      background:var(--orange);
+    }
+    .logo-wrap img{height:42px;display:block}
+    .header-badge{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+    .header-badge .badge-label{
+      font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+      color:var(--orange);background:#FEF0EC;border:1px solid #FBCFC4;
+      border-radius:4px;padding:3px 10px;
+    }
+    .header-badge .badge-sub{font-size:10px;color:var(--muted);font-weight:500}
+
+    /* ── HERO ACCUEIL ────────────────────────────────── */
+    .hero-accueil{
+      background:linear-gradient(135deg,#1B3557 0%,#2D5285 60%,#3B6BA5 100%);
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:72px 24px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-accueil::before{
+      content:'';position:absolute;
+      top:-80px;right:-100px;
+      width:420px;height:420px;border-radius:50%;
+      background:rgba(224,83,40,.1);
+    }
+    .hero-accueil::after{
+      content:'';position:absolute;
+      bottom:-100px;left:80px;
+      width:300px;height:300px;border-radius:50%;
+      background:rgba(255,255,255,.04);
+    }
+    .hero-content{
+      text-align:center;
+      max-width:600px;
+      position:relative;z-index:1;
+    }
+    .hero-icon-wrap{
+      width:88px;height:88px;border-radius:22px;
+      background:rgba(255,255,255,.12);
+      border:1.5px solid rgba(255,255,255,.2);
+      display:flex;align-items:center;justify-content:center;
+      margin:0 auto 32px;
+    }
+    .hero-icon-wrap svg{width:44px;height:44px;color:#fff}
+    .hero-eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(224,83,40,.18);border:1px solid rgba(224,83,40,.35);
+      border-radius:20px;padding:5px 14px;margin-bottom:20px;
+    }
+    .hero-eyebrow span{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#FBCFC4}
+    .hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);flex-shrink:0}
+    .hero-content h1{font-size:30px;font-weight:800;color:#fff;line-height:1.25;margin-bottom:14px}
+    .hero-content h1 em{font-style:normal;color:#FCA07A}
+    .hero-content p{font-size:14px;color:rgba(255,255,255,.72);margin-bottom:40px;line-height:1.65}
+
+    .btn-launch{
+      display:inline-flex;align-items:center;gap:12px;
+      background:var(--orange);color:#fff;
+      font-size:16px;font-weight:700;font-family:inherit;
+      border:none;cursor:pointer;
+      padding:18px 38px;border-radius:12px;
+      box-shadow:0 8px 32px rgba(224,83,40,.38);
+      transition:background .18s,transform .18s,box-shadow .18s;
+    }
+    .btn-launch:hover{
+      background:var(--orange-d);
+      transform:translateY(-2px);
+      box-shadow:0 14px 40px rgba(224,83,40,.48);
+    }
+    .btn-launch svg{width:22px;height:22px;flex-shrink:0}
+
+    .hero-features{
+      display:flex;gap:20px;justify-content:center;flex-wrap:wrap;
+      margin-top:32px;
+    }
+    .hero-feat{
+      display:flex;align-items:center;gap:7px;
+      font-size:12px;color:rgba(255,255,255,.6);
+    }
+    .hero-feat svg{width:14px;height:14px;color:rgba(255,255,255,.45)}
+
+    /* ── FORM STICKY HEADER ──────────────────────────── */
+    .form-topbar{
+      background:#fff;
+      padding:0 48px;
+      height:62px;
+      display:flex;align-items:center;justify-content:space-between;
+      border-bottom:2px solid var(--border);
+      flex-shrink:0;
+      position:sticky;top:0;z-index:200;
+      box-shadow:0 2px 12px rgba(27,53,87,.07);
+    }
+    .btn-back{
+      display:flex;align-items:center;gap:7px;
+      color:var(--navy);font-size:13px;font-weight:600;font-family:inherit;
+      background:none;border:1px solid var(--border);
+      border-radius:8px;padding:8px 14px;cursor:pointer;
+      transition:all .15s;
+    }
+    .btn-back:hover{background:var(--light);border-color:#b0c4de}
+    .btn-back svg{width:15px;height:15px}
+    .topbar-title{display:flex;align-items:center;gap:10px}
+    .topbar-icon{
+      width:34px;height:34px;border-radius:8px;
+      background:#EEF9EE;display:flex;align-items:center;justify-content:center;
+    }
+    .topbar-icon svg{width:17px;height:17px;color:var(--green)}
+    .topbar-label{font-size:13px;font-weight:700;color:var(--navy)}
+    .topbar-sub{font-size:11px;color:var(--muted)}
+
+    /* ── FORM BODY ───────────────────────────────────── */
+    .form-body{
+      max-width:840px;
+      margin:0 auto;
+      padding:28px 20px 130px;
+      width:100%;
+    }
+
+    /* ── FORM CARD ───────────────────────────────────── */
+    .fcard{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:26px 26px 20px;
+      margin-bottom:20px;
+    }
+    .fcard-head{
+      display:flex;align-items:center;gap:10px;
+      margin-bottom:22px;
+      padding-bottom:14px;
+      border-bottom:1px solid var(--border);
+    }
+    .fcard-num{
+      width:28px;height:28px;border-radius:50%;
+      background:var(--navy);color:#fff;
+      font-size:12px;font-weight:700;
+      display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;
+    }
+    .fcard-title{font-size:15px;font-weight:700;color:var(--navy)}
+
+    /* ── SUBSECTION ──────────────────────────────────── */
+    .sub{
+      margin-bottom:18px;
+      padding:15px 18px;
+      border-radius:8px;
+      background:var(--light);
+      border-left:3px solid var(--blue);
+    }
+    .sub:last-child{margin-bottom:0}
+    .sub-title{
+      font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+      color:var(--blue);margin-bottom:14px;
+    }
+    .sub-orange{border-left-color:var(--orange)}.sub-orange .sub-title{color:var(--orange)}
+    .sub-green{border-left-color:var(--green)}.sub-green .sub-title{color:var(--green)}
+    .sub-navy{border-left-color:var(--navy)}.sub-navy .sub-title{color:var(--navy)}
+
+    /* ── FIELDS ──────────────────────────────────────── */
+    .fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+    .fg:last-child{margin-bottom:0}
+    .fr{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    label{font-size:12px;font-weight:600;color:var(--text)}
+    .lsub{font-size:11px;font-weight:400;color:var(--muted)}
+
+    input[type=text],input[type=date],input[type=tel],input[type=email]{
+      width:100%;height:40px;padding:0 12px;
+      border:1px solid var(--border);border-radius:6px;
+      font-size:13px;color:var(--text);font-family:inherit;
+      background:#fff;
+      transition:border-color .15s,box-shadow .15s;
+    }
+    input:focus,textarea:focus{
+      outline:none;border-color:var(--blue);
+      box-shadow:0 0 0 3px rgba(59,107,165,.1);
+    }
+
+    /* ── TEXTAREA + MIC ──────────────────────────────── */
+    .twrap{position:relative}
+    textarea{
+      width:100%;min-height:80px;padding:9px 42px 9px 12px;
+      border:1px solid var(--border);border-radius:6px;
+      font-size:13px;color:var(--text);font-family:inherit;
+      resize:vertical;line-height:1.55;background:#fff;
+      transition:border-color .15s,box-shadow .15s;
+    }
+    .mic{
+      position:absolute;top:7px;right:7px;
+      width:28px;height:28px;border-radius:6px;
+      background:var(--light);border:1px solid var(--border);
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;color:var(--muted);
+      transition:all .15s;
+      flex-shrink:0;
+    }
+    .mic:hover{background:#E8F0FC;border-color:var(--blue);color:var(--blue)}
+    .mic.on{background:#FEF0EC;border-color:var(--orange);color:var(--orange)}
+    .mic.on{animation:blink .9s infinite}
+    .mic svg{width:14px;height:14px}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+
+    /* ── RADIO ───────────────────────────────────────── */
+    .rg{display:flex;gap:7px;flex-wrap:wrap}
+    .ro{
+      display:flex;align-items:center;gap:6px;
+      padding:7px 13px;border-radius:6px;
+      border:1px solid var(--border);background:#fff;
+      cursor:pointer;font-size:13px;font-weight:500;
+      transition:all .15s;user-select:none;
+    }
+    .ro input{display:none}
+    .rd{width:13px;height:13px;border-radius:50%;border:2px solid #CBD5E1;transition:all .15s;flex-shrink:0}
+    .ro.sel{border-color:var(--blue);background:#E8F0FC;color:var(--blue-d)}
+    .ro.sel .rd{border-color:var(--blue);background:var(--blue)}
+    .ro.sel-or{border-color:var(--orange);background:#FEF0EC;color:var(--orange-d)}
+    .ro.sel-or .rd{border-color:var(--orange);background:var(--orange)}
+
+    /* ── CONDITIONAL ─────────────────────────────────── */
+    .cond{display:none;margin-top:10px}
+    .cond.show{display:block}
+
+    /* ── PHOTO MODULE ────────────────────────────────── */
+    .pm{margin-top:8px}
+    .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+    .thumb{
+      position:relative;width:72px;height:72px;
+      border-radius:7px;overflow:hidden;
+      border:1px solid var(--border);flex-shrink:0;
+    }
+    .thumb img{width:100%;height:100%;object-fit:cover}
+    .thumb-del{
+      position:absolute;top:3px;right:3px;
+      width:18px;height:18px;border-radius:50%;
+      background:rgba(0,0,0,.65);color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;font-size:11px;font-weight:800;
+      line-height:1;
+    }
+    .btn-cam{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:12px;font-weight:600;color:var(--blue);font-family:inherit;
+      background:#E8F0FC;border:1px solid #C5D5EA;
+      border-radius:6px;padding:6px 12px;cursor:pointer;
+      transition:all .15s;
+    }
+    .btn-cam:hover{background:#D0E2F4;border-color:var(--blue)}
+    .btn-cam svg{width:14px;height:14px}
+
+    /* ── EXPORT BAR ──────────────────────────────────── */
+    .export-bar{
+      position:fixed;bottom:0;left:0;right:0;
+      background:#fff;border-top:2px solid var(--border);
+      padding:14px 24px;
+      display:flex;align-items:center;justify-content:space-between;
+      z-index:300;
+      box-shadow:0 -4px 24px rgba(27,53,87,.1);
+    }
+    .export-info{font-size:12px;color:var(--muted);line-height:1.5}
+    .export-info strong{color:var(--navy)}
+    .btn-export{
+      display:inline-flex;align-items:center;gap:10px;
+      background:var(--green);color:#fff;
+      font-size:14px;font-weight:700;font-family:inherit;
+      border:none;cursor:pointer;
+      padding:13px 24px;border-radius:10px;
+      box-shadow:0 4px 16px rgba(22,163,74,.25);
+      transition:all .18s;white-space:nowrap;
+    }
+    .btn-export:hover{background:var(--green-d);transform:translateY(-1px)}
+    .btn-export:disabled{opacity:.6;cursor:not-allowed;transform:none}
+    .btn-export svg{width:17px;height:17px}
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer{
+      background:var(--navy);padding:18px 48px;flex-shrink:0;
+    }
+    .footer-inner{
+      max-width:980px;margin:0 auto;
+      display:flex;align-items:center;justify-content:space-between;
+      flex-wrap:wrap;gap:12px;
+    }
+    .footer-left{display:flex;align-items:center;gap:14px}
+    .footer-left img{height:28px;opacity:.8;filter:brightness(0) invert(1)}
+    .fsep{width:1px;height:20px;background:rgba(255,255,255,.18)}
+    .footer-text{font-size:11px;color:rgba(255,255,255,.5)}
+    .footer-right{font-size:11px;color:rgba(255,255,255,.4)}
+    .footer-right span{color:var(--orange);font-weight:600}
+
+    /* ── SECTION LABEL ───────────────────────────────── */
+    .sec-lbl{
+      font-size:11px;font-weight:700;text-transform:uppercase;
+      letter-spacing:.1em;color:var(--muted);
+      margin:0 0 14px;display:flex;align-items:center;gap:10px;
+    }
+    .sec-lbl::before{content:'';width:16px;height:2px;background:var(--muted);border-radius:1px;flex-shrink:0}
+
+    /* ── HERO CARD (nom / date) ───────────────────────── */
+    .hero-card{
+      background:linear-gradient(135deg,#1B3557,#2D5285);
+      border-radius:12px;padding:22px 26px;margin-bottom:22px;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media(max-width:820px){
+      .site-header,.form-topbar{padding:0 16px;height:60px}
+      .hero-content h1{font-size:22px}
+      .form-body{padding:20px 14px 130px}
+      .fcard{padding:18px 14px 14px}
+      .fr{grid-template-columns:1fr}
+      .fr3{grid-template-columns:1fr 1fr}
+      footer{padding:14px 16px}
+      .export-bar{padding:12px 14px}
+    }
+    @media(max-width:480px){
+      .hero-content h1{font-size:19px}
+      .btn-launch{font-size:14px;padding:14px 22px}
+      .fr3{grid-template-columns:1fr}
+      .topbar-label{display:none}
+      .hero-features{display:none}
+    }
+    @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+    .back-bar{padding:12px 48px 0;flex-shrink:0}
+    .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--navy);text-decoration:none;font-size:13px;font-weight:500;padding:6px 12px;border-radius:6px;background:white;border:1px solid var(--border);transition:all .15s}
+    .back-link:hover{background:#f4f7fb;transform:translateX(-2px)}
+/* ── HUB ── */
+main.hub{flex:1;padding:28px 40px 48px;max-width:860px;width:100%;margin:0 auto}
+.hub-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:12px}
+.hub-title{font-size:22px;font-weight:700;color:var(--navy)}
+.hub-sub{font-size:12.5px;color:var(--muted);margin-bottom:24px}
+.btn-new{display:inline-flex;align-items:center;gap:7px;background:#16A34A;color:white;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s}
+.btn-new:hover{filter:brightness(.88)}
+.list-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.list-header{display:grid;grid-template-columns:1fr 130px 130px 215px;gap:12px;padding:10px 18px;background:#f8fafc;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.list-row{display:grid;grid-template-columns:1fr 130px 130px 215px;gap:12px;padding:12px 18px;border-bottom:0.5px solid var(--border);align-items:center;transition:background .12s}
+.list-row:last-child{border-bottom:none}
+.list-row:hover{background:#fafbff}
+.op-name{font-size:14px;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:8px}
+.op-dot{width:8px;height:8px;border-radius:50%;background:#16A34A;flex-shrink:0}
+.op-date{font-size:11.5px;color:var(--muted)}
+.row-acts{display:flex;gap:6px;justify-content:flex-end}
+.btn-sm{display:inline-flex;align-items:center;gap:4px;border:none;border-radius:6px;padding:5px 10px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s}
+.btn-sm:hover{filter:brightness(.88)}
+.btn-open{background:#16A34A;color:white}
+.btn-ren{background:#f1f5f9;color:var(--navy)}
+.btn-del{background:#fee2e2;color:#b91c1c}
+.hub-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 24px;gap:14px;text-align:center}
+.hub-empty-icon{width:64px;height:64px;border-radius:50%;background:rgba(22,163,74,.12);display:flex;align-items:center;justify-content:center}
+.hub-empty-icon svg{width:28px;height:28px;color:#16A34A}
+.hub-empty-title{font-size:15px;font-weight:700;color:var(--navy)}
+.hub-empty-sub{font-size:13px;color:var(--muted);max-width:300px}
+.hub-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center}
+.hub-overlay.show{display:flex}
+.hub-modal{background:white;border-radius:14px;padding:28px 32px;width:360px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.22)}
+.hub-modal h3{font-size:17px;font-weight:700;color:var(--navy);margin:0 0 16px}
+.hub-modal .mhi{width:100%;box-sizing:border-box;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:14px;font-family:inherit;outline:none;transition:border-color .15s}
+.hub-modal .mhi:focus{border-color:#16A34A}
+.hub-modal-acts{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+.btn-mcancel{background:#f1f5f9;color:var(--navy);border:none;border-radius:7px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-mconfirm{background:#16A34A;color:white;border:none;border-radius:7px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+@media(max-width:700px){.list-header,.list-row{grid-template-columns:1fr auto}.col-crd,.col-mod{display:none}main.hub{padding-left:16px;padding-right:16px}}
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  ÉCRAN 1 — ACCUEIL                                        -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="s1" class="screen">
+
+  <header class="site-header">
+    <div class="logo-wrap">
+      <img src="../Hemotech-logo-website-300x72.png.webp" alt="Hemotech">
+    </div>
+    <div class="header-badge">
+      <div class="badge-label">Portail TTE</div>
+      <div class="badge-sub">Traitement de l'eau · Service technique</div>
+    </div>
+  </header>
+  <div class="back-bar">
+    <a href="../index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Retour au portail
+    </a>
+  </div>
+
+  <main class="hub">
+    <div class="hub-top">
+      <div><h1 class="hub-title">Fiches de visite de site</h1></div>
+      <button class="btn-new" onclick="ouvrirModalCreer()">+ Nouvelle visite</button>
+    </div>
+    <p class="hub-sub">Cliquez sur <em>Ouvrir</em> pour consulter ou modifier une fiche existante.</p>
+    <div class="list-card">
+      <div class="list-header">
+        <div>Nom d'opération</div>
+        <div class="col-crd">Créé le</div>
+        <div class="col-mod">Modifié le</div>
+        <div style="text-align:right">Actions</div>
+      </div>
+      <div id="listBody"></div>
+    </div>
+  </main>
+  <div class="hub-overlay" id="hubOverlay">
+    <div class="hub-modal">
+      <h3 id="modalTitle">Nouvelle visite</h3>
+      <input class="mhi" id="modalInput" type="text" placeholder="Ex : Site Dupont — Roubaix" maxlength="80">
+      <div class="hub-modal-acts">
+        <button class="btn-mcancel" onclick="fermerModal()">Annuler</button>
+        <button class="btn-mconfirm" onclick="confirmerModal()">Confirmer</button>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">
+        <img src="../Hemotech-logo-website-300x72.png.webp" alt="Hemotech">
+        <div class="fsep"></div>
+        <div class="footer-text">Service Traitement de l'Eau &nbsp;·&nbsp; Pollet Medical Group</div>
+      </div>
+      <div class="footer-right">© 2026 &nbsp;<span>Hemotech</span> &nbsp;· Usage interne uniquement</div>
+    </div>
+  </footer>
+
+</div><!-- /s1 -->
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  ÉCRAN 2 — FORMULAIRE                                     -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="s2" class="screen screen-hide">
+
+  <!-- Topbar sticky -->
+  <div class="form-topbar">
+    <button class="btn-back" onclick="goToAccueil()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Retour à l'accueil
+    </button>
+    <div class="topbar-title">
+      <div class="topbar-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 11l3 3L22 4"/>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+      </div>
+      <div>
+        <div class="topbar-label">Fiche visite futur site TTE</div>
+        <div class="topbar-sub">Formulaire terrain</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Corps du formulaire -->
+  <div class="form-body">
+
+    <!-- Titre centré -->
+    <div style="text-align:center;margin-bottom:22px">
+      <h2 style="font-size:18px;font-weight:800;color:var(--navy);letter-spacing:.02em">VISITE FUTUR SITE TTE</h2>
+      <p style="font-size:11px;color:var(--muted);margin-top:3px">Formulaire de relevé technique terrain</p>
+    </div>
+
+    <!-- Projet / Date -->
+    <div class="hero-card">
+      <div class="fr" style="gap:18px">
+        <div class="fg" style="margin:0">
+          <label style="color:rgba(255,255,255,.82)">Nom du projet <span style="color:#FCA07A">*</span></label>
+          <input type="text" id="f-projet" placeholder="Établissement — Ville"
+                 style="height:44px;font-weight:600;font-size:14px">
+        </div>
+        <div class="fg" style="margin:0">
+          <label style="color:rgba(255,255,255,.82)">Date de visite</label>
+          <input type="date" id="f-date" style="height:44px">
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  SECTION 1 — INFORMATIONS GÉNÉRALES            -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">1</div>
+        <div class="fcard-title">Informations générales</div>
+      </div>
+
+      <!-- Adresse -->
+      <div class="fg">
+        <label>Adresse du site</label>
+        <div class="twrap">
+          <textarea id="f-adresse" rows="3" placeholder="N° rue, Voie&#10;Code postal Ville"></textarea>
+          <button class="mic" onclick="toggleVoice(this,'f-adresse')" title="Dictée vocale">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div class="sub">
+        <div class="sub-title">Contact</div>
+        <div class="fr" style="margin-bottom:12px">
+          <div class="fg" style="margin:0"><label>Nom</label><input type="text" id="f-cnom" placeholder="Prénom NOM"></div>
+          <div class="fg" style="margin:0"><label>Fonction</label><input type="text" id="f-cfonc" placeholder="Directeur technique…"></div>
+        </div>
+        <div class="fr">
+          <div class="fg" style="margin:0"><label>Téléphone</label><input type="tel" id="f-ctel" placeholder="06 xx xx xx xx"></div>
+          <div class="fg" style="margin:0"><label>E-mail</label><input type="email" id="f-cmail" placeholder="contact@etablissement.fr"></div>
+        </div>
+      </div>
+
+      <!-- Accès -->
+      <div class="sub sub-orange">
+        <div class="sub-title">Accès</div>
+        <div class="fg">
+          <label>Horaires d'accès</label>
+          <input type="text" id="f-horaires" placeholder="Ex : Lun–Ven 8h–18h">
+        </div>
+        <div class="fg">
+          <label>Code d'accès</label>
+          <div class="rg" id="rg-code">
+            <label class="ro sel" onclick="pickRadio('rg-code',this,'NON');showCond('cond-code',false)">
+              <input type="radio" name="code" value="NON" checked><div class="rd"></div>Non
+            </label>
+            <label class="ro" onclick="pickRadio('rg-code',this,'OUI');showCond('cond-code',true)">
+              <input type="radio" name="code" value="OUI"><div class="rd"></div>Oui
+            </label>
+          </div>
+          <div id="cond-code" class="cond">
+            <input type="text" id="f-code-val" placeholder="Précisez le code…">
+          </div>
+        </div>
+        <div class="fg">
+          <label>Carte d'accès</label>
+          <div class="rg" id="rg-carte">
+            <label class="ro sel" onclick="pickRadio('rg-carte',this,'NON')"><input type="radio" name="carte" value="NON" checked><div class="rd"></div>Non</label>
+            <label class="ro" onclick="pickRadio('rg-carte',this,'OUI')"><input type="radio" name="carte" value="OUI"><div class="rd"></div>Oui</label>
+          </div>
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Parking</label>
+          <div class="rg" id="rg-parking">
+            <label class="ro sel" onclick="pickRadio('rg-parking',this,'NON')"><input type="radio" name="parking" value="NON" checked><div class="rd"></div>Non</label>
+            <label class="ro" onclick="pickRadio('rg-parking',this,'OUI')"><input type="radio" name="parking" value="OUI"><div class="rd"></div>Oui</label>
+          </div>
+        </div>
+      </div>
+    </div><!-- /fcard 1 -->
+
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  SECTION 2 — LOCAL TRAITEMENT D'EAU            -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">2</div>
+        <div class="fcard-title">Informations local traitement d'eau</div>
+      </div>
+
+      <div class="sec-lbl">Prérequis</div>
+
+      <!-- Arrivée d'eau -->
+      <div class="sub">
+        <div class="sub-title">Arrivée d'eau</div>
+        <div class="fr" style="margin-bottom:12px">
+          <div class="fg" style="margin:0">
+            <label>Diamètre</label>
+            <input type="text" id="f-eau-diam" placeholder="Ex : DN 20 mm">
+          </div>
+          <div class="fg" style="margin:0">
+            <label>Vanne d'arrêt</label>
+            <div class="rg" id="rg-vanne">
+              <label class="ro sel" onclick="pickRadio('rg-vanne',this,'NON')"><input type="radio" name="vanne" value="NON" checked><div class="rd"></div>Non</label>
+              <label class="ro" onclick="pickRadio('rg-vanne',this,'OUI')"><input type="radio" name="vanne" value="OUI"><div class="rd"></div>Oui</label>
+            </div>
+          </div>
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Localisation <span class="lsub">(à indiquer sur plan)</span></label>
+          <input type="text" id="f-eau-loc" placeholder="Décrivez la localisation">
+        </div>
+        <!-- Photos -->
+        <div class="pm">
+          <div class="thumbs" id="ph-eau"></div>
+          <button class="btn-cam" onclick="triggerPhoto('ph-eau')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>Ajouter une photo
+          </button>
+          <input type="file" accept="image/*" capture="environment" class="photo-input" style="display:none" data-target="ph-eau">
+        </div>
+      </div>
+
+      <!-- Alimentation électrique -->
+      <div class="sub sub-orange">
+        <div class="sub-title">Alimentation électrique</div>
+        <div class="fg">
+          <label>Type de câblage</label>
+          <div class="rg" id="rg-elec">
+            <label class="ro" onclick="pickRadio('rg-elec',this,'ALU')"><input type="radio" name="elec" value="ALU"><div class="rd"></div>Aluminium</label>
+            <label class="ro" onclick="pickRadio('rg-elec',this,'CUIVRE')"><input type="radio" name="elec" value="CUIVRE"><div class="rd"></div>Cuivre</label>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Longueur de mou</label>
+          <input type="text" id="f-elec-long" placeholder="Ex : 3 m">
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Localisation <span class="lsub">(à indiquer sur plan)</span></label>
+          <input type="text" id="f-elec-loc" placeholder="Décrivez la localisation">
+        </div>
+        <div class="pm">
+          <div class="thumbs" id="ph-elec"></div>
+          <button class="btn-cam" onclick="triggerPhoto('ph-elec')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>Ajouter une photo
+          </button>
+          <input type="file" accept="image/*" capture="environment" class="photo-input" style="display:none" data-target="ph-elec">
+        </div>
+      </div>
+
+      <!-- Évacuation(s) -->
+      <div class="sub sub-green">
+        <div class="sub-title">Évacuation(s)</div>
+        <div class="fr3" style="margin-bottom:12px">
+          <div class="fg" style="margin:0"><label>Type</label><input type="text" id="f-ev1-type" placeholder="Gravitaire…"></div>
+          <div class="fg" style="margin:0"><label>Diamètre</label><input type="text" id="f-ev1-diam" placeholder="DN 40"></div>
+          <div class="fg" style="margin:0"><label>Nombre</label><input type="text" id="f-ev1-nb" placeholder="2"></div>
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Localisation <span class="lsub">(à indiquer sur plan)</span></label>
+          <input type="text" id="f-ev1-loc" placeholder="Décrivez la localisation">
+        </div>
+        <div class="pm">
+          <div class="thumbs" id="ph-ev1"></div>
+          <button class="btn-cam" onclick="triggerPhoto('ph-ev1')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>Ajouter une photo
+          </button>
+          <input type="file" accept="image/*" capture="environment" class="photo-input" style="display:none" data-target="ph-ev1">
+        </div>
+      </div>
+
+      <div class="sec-lbl" style="margin-top:4px">Architecture du local</div>
+
+      <!-- Architecture -->
+      <div class="sub sub-navy">
+        <div class="sub-title">Dimensions &amp; caractéristiques</div>
+        <div class="fr" style="margin-bottom:12px">
+          <div class="fg" style="margin:0"><label>Dimensions du local</label><input type="text" id="f-loc-dim" placeholder="L × l × H (m)"></div>
+          <div class="fg" style="margin:0"><label>Dimensions porte d'entrée</label><input type="text" id="f-loc-porte" placeholder="L × H (m)"></div>
+        </div>
+        <div class="fr" style="margin-bottom:12px">
+          <div class="fg" style="margin:0"><label>Charge au sol admissible</label><input type="text" id="f-loc-charge" placeholder="kg/m²"></div>
+          <div class="fg" style="margin:0"><label>Présence faux-plafond</label><input type="text" id="f-loc-fp" placeholder="Oui / Non / Type"></div>
+        </div>
+        <div class="fr" style="margin-bottom:12px">
+          <div class="fg" style="margin:0"><label>Hauteur sous faux-plafond</label><input type="text" id="f-loc-hfp" placeholder="Ex : 2,50 m"></div>
+          <div class="fg" style="margin:0"><label>Hauteur sous dalle</label><input type="text" id="f-loc-hdalle" placeholder="Ex : 3,00 m"></div>
+        </div>
+        <div class="fr" style="margin-bottom:12px">
+          <div class="fg" style="margin:0"><label>Hauteur d'allège (si fenêtre)</label><input type="text" id="f-loc-allege" placeholder="Ex : 0,90 m"></div>
+          <div class="fg" style="margin:0"><label>Éclairage</label><input type="text" id="f-loc-ecl" placeholder="Type d'éclairage"></div>
+        </div>
+        <div class="fg">
+          <label>Fermeture du local</label>
+          <input type="text" id="f-loc-fermeture" placeholder="Clé, badge, digicode…">
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Observations diverses</label>
+          <div class="twrap">
+            <textarea id="f-loc-obs" rows="3" placeholder="Toute information utile sur le local…"></textarea>
+            <button class="mic" onclick="toggleVoice(this,'f-loc-obs')" title="Dictée vocale">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="pm">
+          <div class="thumbs" id="ph-local"></div>
+          <button class="btn-cam" onclick="triggerPhoto('ph-local')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>Ajouter une photo
+          </button>
+          <input type="file" accept="image/*" capture="environment" class="photo-input" style="display:none" data-target="ph-local">
+        </div>
+      </div>
+
+      <!-- Remarques S2 -->
+      <div class="fg" style="margin-top:14px">
+        <label style="font-weight:700;color:var(--navy)">Remarques / Observations</label>
+        <div class="twrap">
+          <textarea id="f-s2-rem" rows="3" placeholder="Remarques générales sur le local traitement d'eau…"></textarea>
+          <button class="mic" onclick="toggleVoice(this,'f-s2-rem')" title="Dictée vocale">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div><!-- /fcard 2 -->
+
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  SECTION 3 — SALLE DE DIALYSE                  -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">3</div>
+        <div class="fcard-title">Informations salle de dialyse</div>
+      </div>
+
+      <!-- Carottages -->
+      <div class="sub">
+        <div class="sub-title">Carottages</div>
+        <div class="fg">
+          <label>Type de paroi</label>
+          <div class="rg" id="rg-paroi">
+            <label class="ro" onclick="pickRadio('rg-paroi',this,'BOIS')"><input type="radio" name="paroi" value="BOIS"><div class="rd"></div>Bois</label>
+            <label class="ro" onclick="pickRadio('rg-paroi',this,'BETON')"><input type="radio" name="paroi" value="BETON"><div class="rd"></div>Béton</label>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Nombre</label>
+          <input type="text" id="f-caro-nb" placeholder="Ex : 4">
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Localisation <span class="lsub">(à indiquer sur plan)</span></label>
+          <input type="text" id="f-caro-loc" placeholder="Décrivez">
+        </div>
+        <div class="pm">
+          <div class="thumbs" id="ph-caro"></div>
+          <button class="btn-cam" onclick="triggerPhoto('ph-caro')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>Ajouter une photo
+          </button>
+          <input type="file" accept="image/*" capture="environment" class="photo-input" style="display:none" data-target="ph-caro">
+        </div>
+      </div>
+
+      <!-- Report de voyant -->
+      <div class="sub sub-orange">
+        <div class="sub-title">Report de voyant</div>
+        <div class="fg" style="margin:0">
+          <label>Localisation <span class="lsub">(à indiquer sur plan)</span></label>
+          <input type="text" id="f-voyant-loc" placeholder="Décrivez">
+        </div>
+        <div class="pm">
+          <div class="thumbs" id="ph-voyant"></div>
+          <button class="btn-cam" onclick="triggerPhoto('ph-voyant')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>Ajouter une photo
+          </button>
+          <input type="file" accept="image/*" capture="environment" class="photo-input" style="display:none" data-target="ph-voyant">
+        </div>
+      </div>
+
+      <!-- Présence faux-plafonds -->
+      <div class="sub sub-green">
+        <div class="sub-title">Présence faux-plafonds</div>
+        <div class="fg" style="margin:0">
+          <label>Type</label>
+          <input type="text" id="f-fp-type" placeholder="Dalle, plâtre, métal…">
+        </div>
+        <div class="pm">
+          <div class="thumbs" id="ph-fp"></div>
+          <button class="btn-cam" onclick="triggerPhoto('ph-fp')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>Ajouter une photo
+          </button>
+          <input type="file" accept="image/*" capture="environment" class="photo-input" style="display:none" data-target="ph-fp">
+        </div>
+      </div>
+
+      <!-- Évacuation salle -->
+      <div class="sub sub-navy">
+        <div class="sub-title">Évacuation salle</div>
+        <div class="fg">
+          <label>Mode d'évacuation</label>
+          <div class="rg" id="rg-evmode">
+            <label class="ro" onclick="pickRadio('rg-evmode',this,'PAR POSTE')"><input type="radio" name="evmode" value="PAR POSTE"><div class="rd"></div>Par poste</label>
+            <label class="ro" onclick="pickRadio('rg-evmode',this,'ATTENTE')"><input type="radio" name="evmode" value="ATTENTE"><div class="rd"></div>Attente</label>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Diamètre</label>
+          <input type="text" id="f-ev2-diam" placeholder="Ex : DN 32">
+        </div>
+        <div class="fg">
+          <label>Localisation <span class="lsub">(à indiquer sur plan)</span></label>
+          <input type="text" id="f-ev2-loc" placeholder="Décrivez">
+        </div>
+        <div class="pm" style="margin-bottom:12px">
+          <div class="thumbs" id="ph-ev2"></div>
+          <button class="btn-cam" onclick="triggerPhoto('ph-ev2')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>Ajouter une photo
+          </button>
+          <input type="file" accept="image/*" capture="environment" class="photo-input" style="display:none" data-target="ph-ev2">
+        </div>
+        <div class="fg">
+          <label>Type de canalisation</label>
+          <div class="rg" id="rg-canal">
+            <label class="ro" onclick="pickRadio('rg-canal',this,'PVC')"><input type="radio" name="canal" value="PVC"><div class="rd"></div>PVC</label>
+            <label class="ro" onclick="pickRadio('rg-canal',this,'HTA')"><input type="radio" name="canal" value="HTA"><div class="rd"></div>HTA</label>
+            <label class="ro" onclick="pickRadio('rg-canal',this,'FONTE')"><input type="radio" name="canal" value="FONTE"><div class="rd"></div>Fonte</label>
+            <label class="ro" onclick="pickRadio('rg-canal',this,'PVC-C')"><input type="radio" name="canal" value="PVC-C"><div class="rd"></div>PVC-C</label>
+            <label class="ro" onclick="pickRadio('rg-canal',this,'PEHD')"><input type="radio" name="canal" value="PEHD"><div class="rd"></div>PEHD</label>
+          </div>
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Siphonné</label>
+          <div class="rg" id="rg-siphon">
+            <label class="ro sel" onclick="pickRadio('rg-siphon',this,'NON')"><input type="radio" name="siphon" value="NON" checked><div class="rd"></div>Non</label>
+            <label class="ro" onclick="pickRadio('rg-siphon',this,'OUI')"><input type="radio" name="siphon" value="OUI"><div class="rd"></div>Oui</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meuble -->
+      <div class="sub sub-orange">
+        <div class="sub-title">Meuble / Boîte de connexion</div>
+        <div class="fr" style="margin-bottom:12px">
+          <div class="fg" style="margin:0"><label>Dimensions ouverture</label><input type="text" id="f-meuble-dim" placeholder="L × H (cm)"></div>
+          <div class="fg" style="margin:0"><label>Hauteur sous ouverture boîte</label><input type="text" id="f-meuble-haut" placeholder="Ex : 45 cm"></div>
+        </div>
+        <div class="fg">
+          <label>Présence panneau démontable entre boîtes</label>
+          <div class="rg" id="rg-panneau">
+            <label class="ro sel" onclick="pickRadio('rg-panneau',this,'NON')"><input type="radio" name="panneau" value="NON" checked><div class="rd"></div>Non</label>
+            <label class="ro" onclick="pickRadio('rg-panneau',this,'OUI')"><input type="radio" name="panneau" value="OUI"><div class="rd"></div>Oui</label>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Présence panneau sous boîte</label>
+          <div class="rg" id="rg-sous">
+            <label class="ro sel" onclick="pickRadio('rg-sous',this,'NON')"><input type="radio" name="sous" value="NON" checked><div class="rd"></div>Non</label>
+            <label class="ro" onclick="pickRadio('rg-sous',this,'OUI')"><input type="radio" name="sous" value="OUI"><div class="rd"></div>Oui</label>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Présence colonne montante</label>
+          <div class="rg" id="rg-colonne">
+            <label class="ro sel" onclick="pickRadio('rg-colonne',this,'NON')"><input type="radio" name="colonne" value="NON" checked><div class="rd"></div>Non</label>
+            <label class="ro" onclick="pickRadio('rg-colonne',this,'OUI')"><input type="radio" name="colonne" value="OUI"><div class="rd"></div>Oui</label>
+          </div>
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Demander les plans</label>
+          <input type="text" id="f-meuble-plans" placeholder="Référence / interlocuteur pour les plans">
+        </div>
+      </div>
+
+      <!-- Remarques S3 -->
+      <div class="fg" style="margin-top:14px">
+        <label style="font-weight:700;color:var(--navy)">Remarques / Observations</label>
+        <div class="twrap">
+          <textarea id="f-s3-rem" rows="3" placeholder="Remarques sur la salle de dialyse…"></textarea>
+          <button class="mic" onclick="toggleVoice(this,'f-s3-rem')" title="Dictée vocale">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div><!-- /fcard 3 -->
+
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  SECTION 4 — LIVRAISON MATÉRIEL                -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">4</div>
+        <div class="fcard-title">Informations pour livraison matériel</div>
+      </div>
+
+      <!-- Quai -->
+      <div class="sub">
+        <div class="sub-title">Quai de déchargement</div>
+        <div class="rg" id="rg-quai">
+          <label class="ro" onclick="pickRadio('rg-quai',this,'OUI')"><input type="radio" name="quai" value="OUI"><div class="rd"></div>Oui</label>
+          <label class="ro" onclick="pickRadio('rg-quai',this,'NON')"><input type="radio" name="quai" value="NON"><div class="rd"></div>Non</label>
+        </div>
+        <div class="pm">
+          <div class="thumbs" id="ph-quai"></div>
+          <button class="btn-cam" onclick="triggerPhoto('ph-quai')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>Ajouter une photo
+          </button>
+          <input type="file" accept="image/*" capture="environment" class="photo-input" style="display:none" data-target="ph-quai">
+        </div>
+      </div>
+
+      <!-- Horaires livraison -->
+      <div class="sub sub-orange">
+        <div class="sub-title">Horaires particulières de livraison</div>
+        <div class="fg" style="margin:0">
+          <input type="text" id="f-livr-h" placeholder="Ex : Lun–Ven 7h–12h, sur RDV">
+        </div>
+      </div>
+
+      <!-- Ascenseur -->
+      <div class="sub sub-green">
+        <div class="sub-title">Présence ascenseur</div>
+        <div class="fr3">
+          <div class="fg" style="margin:0"><label>Dimensions portes</label><input type="text" id="f-asc-p" placeholder="L × H (m)"></div>
+          <div class="fg" style="margin:0"><label>Dimensions ascenseur</label><input type="text" id="f-asc-d" placeholder="L × l × H (m)"></div>
+          <div class="fg" style="margin:0"><label>Poids maxi. admissible</label><input type="text" id="f-asc-poids" placeholder="Ex : 630 kg"></div>
+        </div>
+      </div>
+
+      <!-- Passage matériel -->
+      <div class="sub sub-navy">
+        <div class="sub-title">Vérifier le passage du matériel</div>
+        <div class="fg" style="margin:0">
+          <div class="twrap">
+            <textarea id="f-passage" rows="3" placeholder="Chemin d'accès, contraintes de gabarit, portes étroites…"></textarea>
+            <button class="mic" onclick="toggleVoice(this,'f-passage')" title="Dictée vocale">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="pm">
+          <div class="thumbs" id="ph-passage"></div>
+          <button class="btn-cam" onclick="triggerPhoto('ph-passage')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>Ajouter une photo
+          </button>
+          <input type="file" accept="image/*" capture="environment" class="photo-input" style="display:none" data-target="ph-passage">
+        </div>
+      </div>
+
+      <!-- Remarques S4 -->
+      <div class="fg" style="margin-top:14px">
+        <label style="font-weight:700;color:var(--navy)">Remarques / Observations</label>
+        <div class="twrap">
+          <textarea id="f-s4-rem" rows="3" placeholder="Remarques sur la livraison et logistique…"></textarea>
+          <button class="mic" onclick="toggleVoice(this,'f-s4-rem')" title="Dictée vocale">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div><!-- /fcard 4 -->
+
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  SECTION 5 — PHOTOS DIVERSES                   -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="fcard">
+      <div class="fcard-head">
+        <div class="fcard-num">5</div>
+        <div class="fcard-title">Photos diverses</div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:14px">
+        Photos complémentaires non liées aux sections précédentes.
+      </p>
+      <div class="pm">
+        <div class="thumbs" id="ph-divers"
+             style="min-height:72px;border:2px dashed var(--border);border-radius:8px;
+                    padding:10px;align-items:center;display:flex;flex-wrap:wrap;gap:8px"></div>
+        <button class="btn-cam" style="margin-top:10px;padding:8px 16px;font-size:13px" onclick="triggerPhoto('ph-divers')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>Ajouter des photos
+        </button>
+        <input type="file" accept="image/*" capture="environment" multiple class="photo-input" style="display:none" data-target="ph-divers">
+      </div>
+    </div>
+
+  </div><!-- /form-body -->
+
+  <!-- ── BARRE EXPORT FIXE ──────────────────────────── -->
+  <div class="export-bar">
+    <div class="export-info">
+      <strong>Rapport prêt à exporter ?</strong><br>
+      Tous les champs remplis seront inclus dans le document Word.
+    </div>
+    <button class="btn-export" id="btn-export" onclick="exportWord()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Finaliser et Exporter (.doc)
+    </button>
+  </div>
+
+</div><!-- /s2 -->
+
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════════════ */
+function goToFormDirect() {
+  const s1 = document.getElementById('s1');
+  const s2 = document.getElementById('s2');
+  s1.style.opacity = '0';
+  s1.style.transform = 'translateY(-10px)';
+  setTimeout(() => {
+    s1.classList.add('screen-hide');
+    s2.classList.remove('screen-hide');
+    s2.style.opacity = '0';
+    s2.style.transform = 'translateY(10px)';
+    // Forcer le reflow
+    s2.getBoundingClientRect();
+    s2.style.transition = 'opacity .3s ease, transform .3s ease';
+    s2.style.opacity = '1';
+    s2.style.transform = 'translateY(0)';
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, 300);
+}
+
+function goToAccueil() {
+  hubSauverEntree();
+  stopVoice();
+  currentEntryId = null;
+  const s1 = document.getElementById('s1');
+  const s2 = document.getElementById('s2');
+  s2.style.opacity = '0';
+  s2.style.transform = 'translateY(10px)';
+  setTimeout(() => {
+    s2.classList.add('screen-hide');
+    s1.classList.remove('screen-hide');
+    s1.style.transition = 'opacity .3s ease, transform .3s ease';
+    s1.style.opacity = '1';
+    s1.style.transform = 'translateY(0)';
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    rendreListe();
+  }, 300);
+}
+
+
+/* ── HUB ── */
+var HUB_KEY='visite_index';var currentEntryId=null;var hubModalMode='create';var hubRenameId=null;
+function hubChargerIndex(){try{return JSON.parse(localStorage.getItem(HUB_KEY))||[];}catch(e){return[];}}
+function hubSauverIndex(d){localStorage.setItem(HUB_KEY,JSON.stringify(d));}
+function hubCollectForm(){var data={};document.querySelectorAll('#s2 input[id],#s2 select[id],#s2 textarea[id]').forEach(function(el){if(el.type==='radio')return;if(el.type==='checkbox')data['_cb_'+el.id]=el.checked;else data[el.id]=el.value;});document.querySelectorAll('#s2 input[type=radio]').forEach(function(el){if(el.name&&el.checked)data['_radio_'+el.name]=el.value;});return data;}
+function hubRestoreForm(data){if(!data)return;Object.keys(data).forEach(function(key){if(key.startsWith('_radio_')){var name=key.substring(7),val=data[key];var el=document.querySelector('#s2 input[name="'+name+'"][value="'+val+'"]');if(el){el.checked=true;}}else if(key.startsWith('_cb_')){var el=document.getElementById(key.substring(4));if(el)el.checked=!!data[key];}else{var el=document.getElementById(key);if(el&&el.type!=='radio'&&el.type!=='checkbox'){el.value=data[key]||'';}}});}
+function hubSauverEntree(){if(!currentEntryId)return;try{var data=hubCollectForm();localStorage.setItem(HUB_KEY+'_'+currentEntryId,JSON.stringify(data));var idx=hubChargerIndex();idx=idx.map(function(e){return e.id===currentEntryId?Object.assign({},e,{dateModif:new Date().toISOString()}):e;});hubSauverIndex(idx);}catch(ex){}}
+function hubChargerEntree(id){try{var data=JSON.parse(localStorage.getItem(HUB_KEY+'_'+id));if(data){hubRestoreForm(data);setTimeout(function(){document.querySelectorAll('#s2 .rg').forEach(function(rg){var checked=rg.querySelector('input[type=radio]:checked');if(checked){var ro=checked.closest('.ro');if(ro)ro.click();}});},20);}}catch(ex){}}
+function fmtDate(iso){if(!iso)return'—';var d=new Date(iso);return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'});}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function rendreListe(){var idx=hubChargerIndex();var lb=document.getElementById('listBody');if(!lb)return;if(idx.length===0){lb.innerHTML='<div class="hub-empty"><div class="hub-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><h3 class="hub-empty-title">Aucune fiche de visite</h3><p class="hub-empty-sub">Cliquez sur « + Nouvelle visite » pour commencer.</p></div>';return;}lb.innerHTML=idx.map(function(e){return'<div class="list-row"><div class="op-name"><span class="op-dot"></span>'+esc(e.nom)+'</div><div class="op-date col-crd">'+fmtDate(e.dateCrea)+'</div><div class="op-date col-mod">'+fmtDate(e.dateModif)+'</div><div class="row-acts"><button class="btn-sm btn-open" onclick="hubOuvrir(\''+e.id+'\')">Ouvrir</button><button class="btn-sm btn-ren" onclick="ouvrirModalRenommer(\''+e.id+'\',\''+esc(e.nom)+'\')">Renommer</button><button class="btn-sm btn-del" onclick="hubSupprimer(\''+e.id+'\')">Supprimer</button></div></div>';}).join('');}
+function ouvrirModalCreer(){hubModalMode='create';hubRenameId=null;document.getElementById('modalTitle').textContent='Nouvelle visite de site';document.getElementById('modalInput').value='';document.getElementById('hubOverlay').classList.add('show');setTimeout(function(){document.getElementById('modalInput').focus();},80);}
+function ouvrirModalRenommer(id,nom){hubModalMode='rename';hubRenameId=id;document.getElementById('modalTitle').textContent='Renommer la visite';document.getElementById('modalInput').value=nom;document.getElementById('hubOverlay').classList.add('show');setTimeout(function(){document.getElementById('modalInput').focus();},80);}
+function fermerModal(){document.getElementById('hubOverlay').classList.remove('show');}
+function confirmerModal(){var nom=(document.getElementById('modalInput').value||'').trim();if(!nom)return;if(hubModalMode==='create'){var id='h'+Date.now();var idx=hubChargerIndex();idx.push({id:id,nom:nom,dateCrea:new Date().toISOString(),dateModif:new Date().toISOString()});hubSauverIndex(idx);fermerModal();currentEntryId=id;goToFormDirect();}else{var idx=hubChargerIndex();idx=idx.map(function(e){return e.id===hubRenameId?Object.assign({},e,{nom:nom}):e;});hubSauverIndex(idx);fermerModal();rendreListe();}}
+function hubSupprimer(id){if(!confirm('Supprimer cette fiche ? Cette action est irréversible.'))return;var idx=hubChargerIndex().filter(function(e){return e.id!==id;});hubSauverIndex(idx);localStorage.removeItem(HUB_KEY+'_'+id);rendreListe();}
+function hubOuvrir(id){currentEntryId=id;goToFormDirect();setTimeout(function(){hubChargerEntree(id);},50);}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')fermerModal();});
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('hubOverlay').classList.contains('show')){e.preventDefault();confirmerModal();}});
+rendreListe();
+
+/* ══════════════════════════════════════════════════════════
+   RADIO BUTTONS
+══════════════════════════════════════════════════════════ */
+function pickRadio(groupId, el, val) {
+  document.querySelectorAll('#' + groupId + ' .ro').forEach(r => r.classList.remove('sel'));
+  el.classList.add('sel');
+  const inp = el.querySelector('input[type=radio]');
+  if (inp) inp.checked = true;
+}
+
+function getRadio(groupId) {
+  const el = document.querySelector('#' + groupId + ' .ro.sel input');
+  return el ? el.value : '';
+}
+
+function showCond(id, show) {
+  document.getElementById(id).classList.toggle('show', show);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   DICTÉE VOCALE
+══════════════════════════════════════════════════════════ */
+let activeRec = null;
+let activeMic = null;
+
+function toggleVoice(btn, targetId) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    alert('Dictée vocale non disponible sur ce navigateur.\nUtilisez Chrome ou Edge.');
+    return;
+  }
+  // Si déjà actif sur ce bouton → stop
+  if (activeMic === btn) { stopVoice(); return; }
+  // Si actif sur un autre → stop d'abord
+  if (activeRec) stopVoice();
+
+  const rec = new SR();
+  rec.lang = 'fr-FR';
+  rec.continuous = true;
+  rec.interimResults = false;
+
+  rec.onresult = e => {
+    const ta = document.getElementById(targetId);
+    if (!ta) return;
+    let t = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript;
+    ta.value += (ta.value ? ' ' : '') + t;
+  };
+  rec.onerror = e => {
+    if (e.error !== 'aborted') console.warn('Mic error:', e.error);
+    stopVoice();
+  };
+  rec.onend = () => stopVoice();
+
+  activeRec = rec;
+  activeMic = btn;
+  btn.classList.add('on');
+  btn.title = 'Cliquer pour arrêter';
+  rec.start();
+}
+
+function stopVoice() {
+  if (activeRec) { try { activeRec.stop(); } catch(e){} activeRec = null; }
+  if (activeMic) { activeMic.classList.remove('on'); activeMic.title = 'Dictée vocale'; activeMic = null; }
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   PHOTO MODULE
+══════════════════════════════════════════════════════════ */
+function triggerPhoto(containerId) {
+  const container = document.getElementById(containerId);
+  const inp = container.closest('.fcard, .pm').querySelector
+    ? container.parentElement.querySelector('.photo-input[data-target="' + containerId + '"]')
+    : null;
+  // Cherche l'input dans le même .pm
+  const pm = container.closest('.pm');
+  if (pm) {
+    const inp2 = pm.querySelector('.photo-input');
+    if (inp2) { inp2.click(); return; }
+  }
+}
+
+// Délégation sur tous les inputs photo
+document.addEventListener('change', e => {
+  const inp = e.target;
+  if (!inp.classList.contains('photo-input')) return;
+  const targetId = inp.dataset.target;
+  const container = document.getElementById(targetId);
+  if (!container) return;
+  Array.from(inp.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const div = document.createElement('div');
+      div.className = 'thumb';
+      div.dataset.b64 = ev.target.result;
+      div.innerHTML = `
+        <img src="${ev.target.result}" alt="Photo">
+        <div class="thumb-del" onclick="this.closest('.thumb').remove()" title="Supprimer">×</div>
+      `;
+      container.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+  inp.value = '';
+});
+
+function getPhotos(containerId) {
+  return Array.from(document.querySelectorAll('#' + containerId + ' .thumb'))
+              .map(t => t.dataset.b64).filter(Boolean);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════════════ */
+const $ = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+
+
+/* ══════════════════════════════════════════════════════════
+   EXPORT WORD
+══════════════════════════════════════════════════════════ */
+function exportWord() {
+  const btn = document.getElementById('btn-export');
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<svg style="width:17px;height:17px;animation:spin 1s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Génération…';
+
+  try {
+    const projet  = $('f-projet');
+    const dateVal = $('f-date');
+    const dateStr = dateVal
+      ? new Date(dateVal + 'T12:00:00').toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' })
+      : new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' });
+
+    const codeVal = getRadio('rg-code');
+    const codeStr = codeVal === 'OUI' ? 'Oui — ' + ($('f-code-val') || 'non précisé') : (codeVal || '—');
+
+    // Echappement HTML
+    const e = s => (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    // Helpers lignes tableau
+    const secH = t => `<tr><td colspan="2" style="background:#1B3557;color:#fff;font-weight:bold;font-size:12pt;padding:6pt 8pt;border:1pt solid #8899BB">${e(t)}</td></tr>`;
+    const subH = (t, bg='#E8F0FC', col='#2D5285') => `<tr><td colspan="2" style="background:${bg};color:${col};font-weight:bold;font-size:10pt;padding:4pt 8pt;border:1pt solid #BBCCE0">${e(t)}</td></tr>`;
+    const dr   = (l, v) => `<tr>
+      <td style="background:#F4F7FB;font-weight:bold;width:35%;padding:4pt 8pt;border:1pt solid #BBCCE0;vertical-align:top">${e(l)}</td>
+      <td style="padding:4pt 8pt;border:1pt solid #BBCCE0;vertical-align:top">${e(v || '—')}</td></tr>`;
+    const mr   = (l, v) => {
+      const lines = (v || '').split('\n').filter(Boolean);
+      const html  = lines.length ? lines.map(x => `<p style="margin:0 0 3pt 0">${e(x)}</p>`).join('') : '—';
+      return `<tr>
+        <td style="background:#F4F7FB;font-weight:bold;width:35%;padding:4pt 8pt;border:1pt solid #BBCCE0;vertical-align:top">${e(l)}</td>
+        <td style="padding:4pt 8pt;border:1pt solid #BBCCE0;vertical-align:top">${html}</td></tr>`;
+    };
+
+    // Photos par section
+    const photoGroups = [
+      { id:'ph-eau',     label:"Arrivée d'eau" },
+      { id:'ph-elec',    label:'Alimentation électrique' },
+      { id:'ph-ev1',     label:'Évacuation(s) — local' },
+      { id:'ph-local',   label:'Architecture du local' },
+      { id:'ph-caro',    label:'Carottages' },
+      { id:'ph-voyant',  label:'Report de voyant' },
+      { id:'ph-fp',      label:'Faux-plafonds salle' },
+      { id:'ph-ev2',     label:'Évacuation salle' },
+      { id:'ph-quai',    label:'Quai de déchargement' },
+      { id:'ph-passage', label:'Passage du matériel' },
+      { id:'ph-divers',  label:'Photos diverses' },
+    ];
+
+    let photoHTML = '';
+    let hasPhotos = false;
+    for (const g of photoGroups) {
+      const ph = getPhotos(g.id);
+      if (!ph.length) continue;
+      if (!hasPhotos) { photoHTML += secH('5. PHOTOS'); hasPhotos = true; }
+      photoHTML += subH('Photos — ' + g.label, '#FFF3E8', '#C44820');
+      for (let i = 0; i < ph.length; i += 2) {
+        let cells = '';
+        for (let j = i; j < Math.min(i + 2, ph.length); j++) {
+          cells += `<td style="padding:4pt;text-align:center;border:1pt solid #BBCCE0"><img src="${ph[j]}" style="max-width:240pt;max-height:180pt"></td>`;
+        }
+        if ((i + 2) > ph.length && ph.length % 2 !== 0) cells += '<td style="border:1pt solid #BBCCE0"></td>';
+        photoHTML += `<tr>${cells}</tr>`;
+      }
+    }
+
+    // Document Word HTML complet
+    const doc = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:w="urn:schemas-microsoft-com:office:word"
+  xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<title>Visite TTE${projet ? ' — ' + projet : ''}</title>
+<!--[if gte mso 9]><xml><w:WordDocument>
+  <w:View>Print</w:View><w:Zoom>100</w:Zoom>
+</w:WordDocument></xml><![endif]-->
+<style>
+  @page Section1 { size:21.0cm 29.7cm; margin:2.0cm 2.0cm 2.0cm 2.0cm; }
+  div.Section1   { page:Section1; }
+  body  { font-family:Arial,sans-serif; font-size:10pt; color:#1E293B; }
+  table { border-collapse:collapse; width:100%; }
+  h1    { font-size:16pt; color:#1B3557; text-align:center; margin:0 0 4pt; }
+  .sub  { text-align:center; color:#E05328; font-size:13pt; font-weight:bold; margin:0 0 2pt; }
+  .dat  { text-align:center; color:#64748B; font-size:10pt; margin:0 0 14pt; }
+</style>
+</head>
+<body><div class="Section1">
+<h1>VISITE FUTUR SITE TTE</h1>
+${projet ? `<p class="sub">${e(projet)}</p>` : ''}
+<p class="dat">Visite du ${e(dateStr)}</p>
+<table>
+${secH('1. INFORMATIONS GÉNÉRALES')}
+${mr("Adresse du site", $('f-adresse'))}
+${dr("Contact — Nom",       $('f-cnom'))}
+${dr("Contact — Fonction",  $('f-cfonc'))}
+${dr("Contact — Téléphone", $('f-ctel'))}
+${dr("Contact — E-mail",    $('f-cmail'))}
+${dr("Horaires d'accès",    $('f-horaires'))}
+${dr("Code d'accès",        codeStr)}
+${dr("Carte d'accès",       getRadio('rg-carte'))}
+${dr("Parking",             getRadio('rg-parking'))}
+${secH("2. LOCAL TRAITEMENT D'EAU")}
+${subH("Arrivée d'eau")}
+${dr("Diamètre",     $('f-eau-diam'))}
+${dr("Vanne d'arrêt", getRadio('rg-vanne'))}
+${dr("Localisation", $('f-eau-loc'))}
+${subH("Alimentation électrique","#FFF0E8","#C44820")}
+${dr("Type de câblage",  getRadio('rg-elec'))}
+${dr("Longueur de mou",  $('f-elec-long'))}
+${dr("Localisation",     $('f-elec-loc'))}
+${subH("Évacuation(s)","#EEF9EE","#15803D")}
+${dr("Type",        $('f-ev1-type'))}
+${dr("Diamètre",    $('f-ev1-diam'))}
+${dr("Nombre",      $('f-ev1-nb'))}
+${dr("Localisation",$('f-ev1-loc'))}
+${subH("Architecture du local","#EEF2F8","#1B3557")}
+${dr("Dimensions du local",          $('f-loc-dim'))}
+${dr("Dimensions porte d'entrée",    $('f-loc-porte'))}
+${dr("Charge au sol admissible",     $('f-loc-charge'))}
+${dr("Présence faux-plafond",        $('f-loc-fp'))}
+${dr("Hauteur sous faux-plafond",    $('f-loc-hfp'))}
+${dr("Hauteur sous dalle",           $('f-loc-hdalle'))}
+${dr("Hauteur d'allège (fenêtre)",   $('f-loc-allege'))}
+${dr("Éclairage",                    $('f-loc-ecl'))}
+${dr("Fermeture du local",           $('f-loc-fermeture'))}
+${mr("Observations diverses",        $('f-loc-obs'))}
+${mr("Remarques / Observations",     $('f-s2-rem'))}
+${secH("3. SALLE DE DIALYSE")}
+${subH("Carottages")}
+${dr("Type de paroi", getRadio('rg-paroi'))}
+${dr("Nombre",        $('f-caro-nb'))}
+${dr("Localisation",  $('f-caro-loc'))}
+${subH("Report de voyant","#FFF0E8","#C44820")}
+${dr("Localisation",  $('f-voyant-loc'))}
+${subH("Présence faux-plafonds","#EEF9EE","#15803D")}
+${dr("Type",          $('f-fp-type'))}
+${subH("Évacuation salle","#EEF2F8","#1B3557")}
+${dr("Mode",                getRadio('rg-evmode'))}
+${dr("Diamètre",            $('f-ev2-diam'))}
+${dr("Localisation",        $('f-ev2-loc'))}
+${dr("Type de canalisation",getRadio('rg-canal'))}
+${dr("Siphonné",            getRadio('rg-siphon'))}
+${subH("Meuble / Boîte de connexion","#FFF0E8","#C44820")}
+${dr("Dimensions ouverture",             $('f-meuble-dim'))}
+${dr("Hauteur sous ouverture boîte",     $('f-meuble-haut'))}
+${dr("Panneau démontable entre boîtes",  getRadio('rg-panneau'))}
+${dr("Panneau sous boîte",               getRadio('rg-sous'))}
+${dr("Colonne montante",                 getRadio('rg-colonne'))}
+${dr("Demander les plans",               $('f-meuble-plans'))}
+${mr("Remarques / Observations",         $('f-s3-rem'))}
+${secH("4. LIVRAISON MATÉRIEL")}
+${dr("Quai de déchargement", getRadio('rg-quai'))}
+${dr("Horaires de livraison",$('f-livr-h'))}
+${subH("Ascenseur")}
+${dr("Dimensions portes",       $('f-asc-p'))}
+${dr("Dimensions ascenseur",    $('f-asc-d'))}
+${dr("Poids maxi. admissible",  $('f-asc-poids'))}
+${mr("Passage du matériel",     $('f-passage'))}
+${mr("Remarques / Observations",$('f-s4-rem'))}
+${photoHTML}
+</table>
+</div></body></html>`;
+
+    const blob = new Blob(['﻿', doc], { type: 'application/msword' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    const safe = projet.replace(/[^\w\s\-]/g,'').replace(/\s+/g,'-').slice(0,40);
+    const dt   = dateVal ? dateVal.replace(/-/g,'') : new Date().toISOString().slice(0,10).replace(/-/g,'');
+    a.href     = url;
+    a.download = `Visite-TTE${safe ? '-'+safe : ''}-${dt}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px"><polyline points="20 6 9 17 4 12"/></svg> Exporté !';
+    setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; }, 3500);
+
+  } catch(err) {
+    console.error(err);
+    alert('Erreur lors de la génération :\n' + err.message);
+    btn.innerHTML = orig;
+    btn.disabled = false;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  // Date du jour par défaut
+  const di = document.getElementById('f-date');
+  if (di) di.value = new Date().toISOString().slice(0, 10);
+  // Transition init écran 1
+  const s1 = document.getElementById('s1');
+  s1.style.opacity = '1';
+  s1.style.transform = 'translateY(0)';
+});
+</script>
+
+</body>
+</html>
